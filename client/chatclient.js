@@ -8,7 +8,6 @@ function chat_keydown(e) {
 	} else {
 		return;
 	}
-	console.log(_chat_text);
 	//socket.emit('chat_enter', {text:_chat_text});
 	_chat_messages.chat_messages.push(_chat_text);
 }
@@ -25,5 +24,4 @@ function chat_push(data) {
 
 function chat_update() {
 	chat_push(_chat_messages);
-	console.log(_chat_messages);
 }
