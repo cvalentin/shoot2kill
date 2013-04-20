@@ -29,14 +29,25 @@ function Bullet(id,player_id,pos,vel){
 }	
 
 function Walls(){
+}
+
+function cons_point(x,y) {
+	return {"x":x,"y":y};
+}
+
+function point_distance(a,b) {
+	return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2));
+}
+
+function rotate_by(pt,theta) {
+	var len = point_distance(pt,cons_point(0,0));
+	var curtheta = Math.atan2(pt.y,pt.x);
+	curtheta += theta;
+	var rtp = cons_point(Math.cos(curtheta),Math.sin(curtheta));
+	return rtp;
 }		
 
-//Global Variables
-
-//array of all players
 var _all_players = [];
-
-//array of all bullets
 var _all_bullets = [];
 var _bullet_id = 0;
 
@@ -44,15 +55,11 @@ var _bullet_id = 0;
 var _player_id_set = 0;
 
 // Start server -- Shiny code WOOO
-// var stdin = process.openStdin();    
+//var stdin = process.openStdin();    
 var io = require('socket.io').listen(1500);
 io.set('log level', 1);
 
-//Server physics
-setInterval(function() {
-	game_update();
-
-},50);
+_all_players.push(new Player(0,new Pos(150,150),new Dir(1,0),new Vel(0,0)));
 
 io.sockets.on('connection', function(socket) {
 	//post a welcome message
@@ -84,9 +91,34 @@ io.sockets.on('connection', function(socket) {
 		io.sockets.emit('server_push', gen_output());
 	}, 50)
 	
-	if (_all_players.length == 0) {
-		_all_players.push(new Player(0,new Pos(50,50),new Dir(1,0),new Vel(0,0)));
-	}
+	setInterval(function() {
+		game_update();
+	},50);
+	
+	socket.on("turn",function(data) {
+		var tarplayer = null;
+		_all_players.forEach(function(i) {
+			if (i.id == data.id) {
+				tarplayer = i;
+			}
+		});
+		if (tarplayer) {
+			tarplayer.dir = rotate_by(tarplayer.dir,data.theta);
+		}
+	});
+	
+	socket.on("move",function(data) {
+		var tarplayer = null;
+		console.log(data);
+		_all_players.forEach(function(i) {
+			if (i.id == data.id) {
+				tarplayer = i;
+			}
+		});
+		if (tarplayer) {
+			tarplayer.vel = data.dirv;
+		}
+	});
 	
 });
 
@@ -94,29 +126,20 @@ function gen_output() {
 	return {players: _all_players, bullets: _all_bullets, walls:[]};
 }
 
-var ct = 0;
-
 function game_update(){
-	
-	if (ct%20==0) {
-		_all_bullets.push(new Bullet(ct,0,new Pos(50,50),new Vel(0,-5)));
-	}
-	ct++;
-	
-
 	for (var i = 0; i < _all_players.length; i++) {
 		var curr_player = _all_players[i];
-		curr_player.pos.x += curr_player.vel.vel_x;
-		curr_player.pos.y += curr_player.vel.vel_y;
+		curr_player.pos.x += curr_player.vel.x;
+		curr_player.pos.y += curr_player.vel.y;
+		
+		curr_player.vel.x*=0.5;
+		curr_player.vel.y*=0.5;
 	}
 
 	//update bullet positions
 	for (var i = 0; i < _all_bullets.length; i++){
 		var curr_bullet = _all_bullets[i];
-		console.log(curr_bullet.pos.x+","+curr_bullet.pos.y);
-		console.log("vel:"+curr_bullet.vel.x+","+curr_bullet.vel.y);
 		curr_bullet.pos.x += curr_bullet.vel.x;
 		curr_bullet.pos.y += curr_bullet.vel.y;
-		console.log(curr_bullet.pos.x+","+curr_bullet.pos.y);
 	}
 }

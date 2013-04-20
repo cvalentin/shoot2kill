@@ -22,80 +22,62 @@ var GLIB = {
 	}
 };
 
-var test = {
-	"players":[
-		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
-		{"id":1, "pos":{"x":150,"y":250}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
-		{"id":2, "pos":{"x":300,"y":80}, "dir":{"x":0.2,"y":0.7}, "vel":{"x":0,"y":0}}
-	],
-	"bullets":[{"pos":{"x":0,"y":0},"vel":{"x":0,"y":0}}],
-	"walls":[]
-};
-
 var _socket = io.connect('http://127.0.0.1:1500');
 var _cur_player_id = 0;
-var tmp = null;
+var _last_data;
 
 window.onload = function() {
 
 	_socket.on('connect', function(data){
+		_last_data = data;
 		draw(data);
 	});
 	
 	_socket.on('server_push', function(data){
-		console.log(data);
+		_last_data = data;
 		draw(data);
 	});
 
 	_g = $("#game_canvas")[0].getContext("2d");
 	SCRN.WID = $("#game_canvas").width();
 	SCRN.HEI = $("#game_canvas").height();
-	/*setInterval(function() {
+	setInterval(function() {
 		update();
-	},50);*/
+	},50);
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
-	
-	/*
-	setInterval(function() {
-		chat_update();
-	},50);
-	*/
-	//document.addEventListener("keydown", chat_keydown);
 };
 
 function update() {
-	var curplayer = test.players[test.playerid];
+	var curplayer = null;
+	_last_data.players.forEach(function(i) {
+		if (i.id == _cur_player_id) curplayer = i;
+	});
+	if (!curplayer) {
+		return;
+	}
+	
 	if (KEYS_DOWN["turnleft"]) {
-		curplayer.dir = rotate_by(curplayer.dir,-0.135);
+		_socket.emit("turn",{"id":_cur_player_id,"theta":-0.135});
 		
 	} 
 	if (KEYS_DOWN["turnright"]) {
-		curplayer.dir = rotate_by(curplayer.dir,0.135);
+		//curplayer.dir = rotate_by(curplayer.dir,0.135);
+		_socket.emit("turn",{"id":_cur_player_id,"theta":0.135});
 	
 	} 
 	if (KEYS_DOWN["forward"]) {
 		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
 		dirv.scalem(7.5);
-		curplayer.vel = cons_point(dirv.x(),dirv.y()); 
+		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
 	
 	} 
 	if (KEYS_DOWN["backward"]) {
-		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		/*var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
 		dirv.scalem(-7.5);
-		curplayer.vel = cons_point(dirv.x(),dirv.y()); 
+		curplayer.vel = cons_point(dirv.x(),dirv.y()); */
 	
 	}
-	
-	test.players.forEach(function(i) {
-		i.pos.x += i.vel.x;
-		i.pos.y += i.vel.y;
-		
-		i.vel.x *= 0.5;
-		i.vel.y *= 0.5;
-	});
-	
-	draw(test);
 }
 
 function fire() {
@@ -103,12 +85,23 @@ function fire() {
 }
 
 function draw(jso) {
+	if (!jso) return;
 	_g.save();
 	
 	GLIB.clear_screen();
 	
 	var center = cons_point(SCRN.WID/2,SCRN.HEI/2);
-	var curplayer = jso.players.filter(function(i) { return _cur_player_id == i.id; })[0].pos;
+	
+	var curplayer = null;
+	jso.players.forEach(function(i) {
+		if (i.id == _cur_player_id) {
+			curplayer = i;
+		}
+	});
+	if (!curplayer) {
+		_g.restore();
+		return;
+	}
 	
 	var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
 	_g.translate(transvec.x(),transvec.y());
