@@ -85,9 +85,9 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on("move",function(data) {
 		var tarplayer = find_player(data.id);
-		if (tarplayer) {			
-			tarplayer.vel = data.dirv;			
-		}
+		if (tarplayer){ tarplayer.vel = data.dirv;	
+			console.log(tarplayer.vel);
+		}		
 	});
 	
 });
@@ -121,15 +121,12 @@ function gen_output() {
 function game_update(){
 	for (var i = 0; i < _all_players.length; i++) {
 		var curr_player = _all_players[i];
-		/*
-		if (is_movable(curr_player)) {
-			curr_player.pos.x += curr_player.vel.x;
-			curr_player.pos.y += curr_player.vel.y;
-			
-			curr_player.vel.x*=0.5;
-			curr_player.vel.y*=0.5;
-		}*/
 
+		curr_player.pos.x += curr_player.vel.x;
+		curr_player.pos.y += curr_player.vel.y;
+			
+		curr_player.vel.x*=0.5;
+		curr_player.vel.y*=0.5;
 
 	}
 	
