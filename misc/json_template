@@ -19,7 +19,8 @@
 						"x":0,
 						"y":0
 					}
-				"health": 1
+				"health": 1,
+				"name": 'name'
 			}
 		],
 	"bullets":

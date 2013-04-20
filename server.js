@@ -14,11 +14,13 @@ function Vel(vel_x,vel_y) {
 	this.y = vel_y;
 }
 
-function Player(id,pos,dir,vel) { 
+function Player(id,pos,dir,vel,name) { 
 	this.id = id;
 	this.pos = pos;
 	this.dir = dir;
 	this.vel = vel;
+	this.health = 1;
+	this.name = name;
 }
 
 function Bullet(id,player_id,pos,vel){
@@ -26,7 +28,7 @@ function Bullet(id,player_id,pos,vel){
 	this.player_id = player_id;
 	this.pos = pos;
 	this.vel = vel;
-	this.health = 1;
+	
 }	
 
 function Walls(){
