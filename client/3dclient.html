@@ -147,6 +147,8 @@ function cons_wall(x,y,wid,hei) {
 	wall = new THREE.Mesh(wallgeo, MATS.WALL);
 	wall.rotation.x = Math.PI/2;
 	wall.translateX(wid/2);
+	wall.translateX(x);
+	wall.translateY(y);
 	_walls.push(wall);
 	scene.add(wall);
 	
@@ -154,6 +156,8 @@ function cons_wall(x,y,wid,hei) {
 	wall.rotation.x = Math.PI/2;
 	wall.rotation.y = Math.PI/2;
 	wall.translateY(-wid/2);
+		wall.translateX(x);
+	wall.translateY(y);
 	_walls.push(wall);
 	scene.add(wall);
 	
@@ -163,6 +167,8 @@ function cons_wall(x,y,wid,hei) {
 	wall.rotation.y = Math.PI/2;
 	wall.translateY(-wid/2);
 	wall.translateX(wid);
+		wall.translateX(x);
+	wall.translateY(y);
 	_walls.push(wall);
 	scene.add(wall);
 	
@@ -170,6 +176,8 @@ function cons_wall(x,y,wid,hei) {
 	wall.rotation.x = Math.PI/2;
 	wall.translateX(wid/2);
 	wall.translateY(-hei);
+	wall.translateX(x);
+	wall.translateY(y);
 	_walls.push(wall);
 	scene.add(wall);
 }
