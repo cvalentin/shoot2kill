@@ -23,7 +23,7 @@ var GLIB = {
 };
 
 var _socket = io.connect('http://127.0.0.1:1500');
-var _cur_player_id = 0;
+var _cur_player_id = -1;
 var _last_data;
 
 window.onload = function() {
@@ -44,6 +44,8 @@ window.onload = function() {
 	setInterval(function() {
 		update();
 	},50);
+	
+	_socket.on('chat_push',chat_push);
 	
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
@@ -107,13 +109,10 @@ function draw(jso) {
 			curplayer = i;
 		}
 	});
-	if (!curplayer) {
-		_g.restore();
-		return;
-	}
-	
-	var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
-	_g.translate(transvec.x(),transvec.y());
+	if (curplayer) {
+		var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
+		_g.translate(transvec.x(),transvec.y());
+	} 
 	
 	jso.players.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,10,COLOR.GREEN);

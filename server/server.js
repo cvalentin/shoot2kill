@@ -14,7 +14,7 @@ var _all_bullets = [];
 var _bullet_id = 0;
 
 //id for players, starts at 0, increment by 1 per player
-var _player_id_set = 0;
+var _player_id_set = -1;
 
 // Start server -- Shiny code WOOO
 //var stdin = process.openStdin();    
@@ -23,23 +23,26 @@ io.set('log level', 1);
 
 
 io.sockets.on('connection', function(socket) {
-	
 	socket.on('chat_enter',chat_enter);
 
 	io.sockets.emit('connect', gen_output());
 	
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data, callback) { 
-		
 		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(1,0), new Vel(0,0), data.name));
 		callback(_player_id_set);
 		_player_id_set++;
-		console.log(_all_players);
-		
 	});
 	
 	socket.on('disconnect', function(data){
-		_all_players.remove(data.id);
+		for(var i = 0; i < _all_players.length; i++) {
+			var cur_players = _all_players[i];
+			if (cur_players.id == data.id) {
+				_all_players.remove(i);
+				console.log("removed one");
+			}
+		}
+		console.log("remove done");
 	});
 
 	socket.on('fire', function(data) {
@@ -118,10 +121,10 @@ function game_update(){
 			for (var j = 0; j < _all_players.length; j++) {
 				var curr_player = _all_players[j];
 				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 9) {
-					console.log("hit!!");
+					_all_players.remove(j);
 				}
 			}
 		}
 	}
-	console.log(_all_bullets.length);
+	console.log(_all_players.length);
 }
