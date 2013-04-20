@@ -50,6 +50,10 @@ window.onload = function() {
 	document.getElementById("enter_chat").addEventListener("keydown", chat_keydown);
 };
 
+window.onbeforeunload = function(){
+    _socket.emit('logoff', {id:_cur_player_id});
+  }
+
 function login() {
 	var player_name = document.getElementById('enter_name').value.toString();
 	document.getElementById("login_button").disabled=true;

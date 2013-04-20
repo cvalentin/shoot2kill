@@ -38,7 +38,7 @@ io.sockets.on('connection', function(socket) {
 		
 	});
 	
-	socket.on('disconnect', function(data){
+	socket.on('logoff', function(data){
 		_all_players.remove(data.id);
 	});
 
