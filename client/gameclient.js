@@ -23,6 +23,11 @@ var GLIB = {
 	"draw_wall":function(x,y,width,height) {
 		_g.fillStyle = COLOR.BLUE;
 		_g.fillRect(x,y,width,height);
+	},
+	"draw_name":function(name, x,y){
+		_g.fillStyle = COLOR.BLACK;
+		_g.font = "8px Arial";
+		_g.fillText(name, x, y);
 	}
 };
 
@@ -134,7 +139,7 @@ function draw(jso) {
 		dvec.normalizem();
 		dvec.scalem(15);
 		GLIB.draw_circle(i.pos.x+dvec.x(),i.pos.y+dvec.y(),3,COLOR.GREEN);
-		
+		GLIB.draw_name(i.name, i.pos.x - 7.5, i.pos.y + 17);		
 	});
 	jso.bullets.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,5,COLOR.RED);
