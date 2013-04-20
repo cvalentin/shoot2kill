@@ -20,7 +20,7 @@ var GLIB = {
 		_g.fillStyle = COLOR.WHITE;
 		_g.fillRect(0,0,SCRN.WID,SCRN.HEI);
 	},
-	"draw_wall":function(x,y,width,height) {
+	"draw_rect":function(x,y,width,height) {
 		_g.fillStyle = COLOR.BLUE;
 		_g.fillRect(x,y,width,height);
 	},
@@ -110,12 +110,11 @@ function fire() {
 	_socket.emit("fire",{"id":_cur_player_id});
 }
 
+var _lcp;
+
 function draw(jso) {
 	if (!jso) return;
 	_g.save();
-	
-
-
 	GLIB.clear_screen();
 	
 	var center = cons_point(SCRN.WID/2,SCRN.HEI/2);
@@ -127,12 +126,16 @@ function draw(jso) {
 		}
 	});
 	if (curplayer) {
-		var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
+		_lcp = curplayer;
+		var transvec = $V([center.x-curplayer.pos.x,center.y-curplayer.pos.y,0]);
 		_g.translate(transvec.x(),transvec.y());
+		//_g.translate(-curplayer.pos.x,-curplayer.pos.y);
+		//console.log(-curplayer.pos.x+","+(-curplayer.pos.y));
 	}
+	
 
 	jso.walls.forEach(function(i) {
-		GLIB.draw_wall(i.x,i.y,i.width,i.height);
+		GLIB.draw_rect(i.x,i.y,i.width,i.height);
 	});
 	
 	// Refresh scoreboard

@@ -75,7 +75,6 @@ function update() {
 	if (!curplayer) {
 		return;
 	}
-	console.log(KEYS_DOWN);
 	
 	if (KEYS_DOWN["turnleft"]) {
 		console.log("left");
@@ -104,6 +103,8 @@ function fire() {
 	_socket.emit("fire",{"id":_cur_player_id});
 }
 
+var _testwall;
+
 function init() {
 	scene = new THREE.Scene();
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -116,17 +117,22 @@ function init() {
 	document.body.appendChild( container );
 	container.appendChild( renderer.domElement );
 
-
-	// FLOOR
+	var wallTexture = new THREE.ImageUtils.loadTexture( 'images/wall.png' );
+	wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping; 
+	wallTexture.repeat.set(20,20);
+	var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture, side: THREE.DoubleSide } );
+	MATS.WALL = wallMaterial;
+	
 	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/ground.jpg' );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
 	floorTexture.repeat.set( 20, 20 );
 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+	MATS.FLOOR = floorMaterial;
+	
 	var floorGeometry = new THREE.PlaneGeometry(10000, 10000, 10, 10);
-	floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	floor = new THREE.Mesh(floorGeometry, MATS.FLOOR);
 	floor.position.y = -0.5;
 	floor.rotation.z = Math.PI / 2;
-	MATS.FLOOR = floorMaterial;
 	
 	var player_texture = THREE.ImageUtils.loadTexture( 'images/guy.png' );
 	var player_material = new THREE.SpriteMaterial( { map: player_texture, useScreenCoordinates: false, color: 0xffffff } );
@@ -136,7 +142,44 @@ function init() {
 	var bullet_material = new THREE.SpriteMaterial( { map: bullet_texture, useScreenCoordinates: false, color: 0xffffff } );
 	MATS.BULLET = bullet_material;
 	camera.up.set(0,0,1);
+	
+	
+	var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0,0,0));
+    geometry.vertices.push(new THREE.Vector3(100,0,0));
+    geometry.vertices.push(new THREE.Vector3(100,0,100));
+    geometry.vertices.push(new THREE.Vector3(0,0,100));
+	geometry.faces.push(new THREE.Face4(0, 1, 2, 3));
+	geometry.faceVertexUvs[0].push([
+	  new THREE.UV(0, 0),
+	  new THREE.UV(1, 0),
+	  new THREE.UV(1, 1),
+	  new THREE.UV(0, 1)
+	]);
+	geometry.computeFaceNormals();
+	geometry.computeCentroids();
+	geometry.computeVertexNormals();
+	var wall= new THREE.Mesh( geometry, MATS.FLOOR);
+	scene.add(wall);
+	
+	/*
+    var geom = new THREE.Geometry();
+    geom.vertices.push(new THREE.Vector3(0,0,0));
+    geom.vertices.push(new THREE.Vector3(100,0,0));
+    geom.vertices.push(new THREE.Vector3(100,0,100));
+    geom.vertices.push(new THREE.Vector3(0,0,100));
+    
+    
+    geom.faces.push( new THREE.Face4( 0, 1, 2, 3 ) );
+    geom.computeFaceNormals();
+    
+    wall= new THREE.Mesh( geom, wallMaterial );
+    //wall= new THREE.Mesh( geom, new THREE.MeshNormalMaterial({side: THREE.DoubleSide, color:0x999999}) );
+    scene.add(wall);
+    */
 }
+
+var wall;
 
 function draw(jso) {
 	if (!jso) return;
@@ -148,6 +191,9 @@ function draw(jso) {
 	_added_bullets= [];
 	scene.add(floor);
 	var curplayer = null;
+	
+
+	scene.add(wall);
 	
 	jso.players.forEach(function(i) {
 		var cgetp = cons_player(i.pos.x,i.pos.y);
