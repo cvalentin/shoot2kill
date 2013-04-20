@@ -47,6 +47,7 @@ window.onload = function() {
 	
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
+	document.getElementById("enter_chat").addEventListener("keydown", chat_keydown);
 };
 
 function login() {
