@@ -11,6 +11,7 @@ includeInThisContext("./serverdef.js");
 
 var _all_players = [];
 var _all_bullets = [];
+var _all_walls = [];
 var _bullet_id = 0;
 
 //id for players, starts at 0, increment by 1 per player
@@ -21,8 +22,9 @@ var _player_id_set = -1;
 var io = require('socket.io').listen(1500);
 io.set('log level', 1);
 
-
 io.sockets.on('connection', function(socket) {
+
+
 	socket.on('chat_enter',chat_enter);
 
 	io.sockets.emit('connect', gen_output());

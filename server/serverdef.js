@@ -27,7 +27,11 @@ function Bullet(id,player_id,pos,vel){
 	this.vel = vel;
 }	
 
-function Walls(){
+function Wall(x, y, width, height){
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
 }
 
 Array.prototype.remove = function(from, to) {
