@@ -28,6 +28,16 @@ function in_wall(x, y, x_disp, y_disp) {
         return inside;
 }
 
+function create_player(name) {
+	var x;
+	var y;
+	var size = _all_walls[0].height;
+	do {
+		x = Math.random() * size;
+		y = Math.random() * size;
+	} while (in_wall(x,y,0,0));
+	_all_players.push(new Player(_player_id_set, new Pos(x,y), new Dir(0,-1), new Vel(0,0), name));	
+}
 
 // Start server -- Shiny code WOOO
 //var stdin = process.openStdin();    
@@ -43,7 +53,7 @@ io.sockets.on('connection', function(socket) {
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data, callback) {
 		_player_id_set++; 
-		_all_players.push(new Player(_player_id_set, new Pos(250,250), new Dir(0,-1), new Vel(0,0), data.name));
+		create_player(data.name);
 		callback(_player_id_set);
 		_all_scores[_player_id_set] = 0;
 	});
