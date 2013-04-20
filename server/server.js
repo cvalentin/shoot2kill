@@ -107,7 +107,11 @@ function game_update(){
 		curr_bullet.pos.y += curr_bullet.vel.y;
 		curr_bullet.ct--;
 		if (curr_bullet.ct <= 0) {
-			//_all_bullets.remove(curr_bullet);
+			_all_bullets.remove(i);
+		} else {
+			
+			
 		}
 	}
+	console.log(_all_bullets.length);
 }
