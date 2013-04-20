@@ -2,14 +2,16 @@ var KEYBOARD = {
 	"LEFT_ARROW":37,
 	"RIGHT_ARROW":39,
 	"UP_ARROW":38,
-	"DOWN_ARROW":40
+	"DOWN_ARROW":40,
+	"SPACE":32
 };
 
 var CONTROLS = {
 	"turnleft":[KEYBOARD.LEFT_ARROW],
 	"turnright":[KEYBOARD.RIGHT_ARROW],
 	"forward":[KEYBOARD.UP_ARROW],
-	"backward":[KEYBOARD.DOWN_ARROW]
+	"backward":[KEYBOARD.DOWN_ARROW],
+	"fire":[KEYBOARD.SPACE]
 };
 
 var KEYS_DOWN = {};
