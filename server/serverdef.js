@@ -12,11 +12,12 @@ function Vel(vel_x,vel_y) {
 	this.y = vel_y;
 }
 
-function Player(id,pos,dir,vel) { 
+function Player(id,pos,dir,vel,name) { 
 	this.id = id;
 	this.pos = pos;
 	this.dir = dir;
 	this.vel = vel;
+	this.name = name;
 }
 
 function Bullet(id,player_id,pos,vel){

@@ -23,7 +23,7 @@ var GLIB = {
 };
 
 var _socket = io.connect('http://127.0.0.1:1500');
-var _cur_player_id = 0;
+var _cur_player_id = -1;
 var _last_data;
 
 window.onload = function() {
@@ -45,10 +45,16 @@ window.onload = function() {
 		update();
 	},50);
 	
+	_socket.on('chat_push',chat_push);
+	
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
 	document.getElementById("enter_chat").addEventListener("keydown", chat_keydown);
 };
+
+window.onbeforeunload = function(){
+    _socket.emit('logoff', {id:_cur_player_id});
+  }
 
 function login() {
 	var player_name = document.getElementById('enter_name').value.toString();
@@ -107,13 +113,10 @@ function draw(jso) {
 			curplayer = i;
 		}
 	});
-	if (!curplayer) {
-		_g.restore();
-		return;
-	}
-	
-	var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
-	_g.translate(transvec.x(),transvec.y());
+	if (curplayer) {
+		var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
+		_g.translate(transvec.x(),transvec.y());
+	} 
 	
 	jso.players.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,10,COLOR.GREEN);
