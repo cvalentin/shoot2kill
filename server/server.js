@@ -20,7 +20,6 @@ var _player_id_set = 0;
 //var stdin = process.openStdin();    
 var io = require('socket.io').listen(1500);
 io.set('log level', 1);
-
 io.sockets.on('connection', function(socket) {
 	
 	socket.on('chat_enter',chat_enter);
@@ -32,6 +31,8 @@ io.sockets.on('connection', function(socket) {
 		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(0,0), new Vel(0,0), data.name));
 		callback(_player_id_set);
 		_player_id_set++;
+		console.log(_all_players);
+		
 	});
 	
 	socket.on('fire', function(data) {
