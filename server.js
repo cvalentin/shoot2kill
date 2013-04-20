@@ -1,23 +1,32 @@
 //Objects
 
-function Player(x,y,name,avatar,id) { 
+function Pos(x,y) {
 	this.x = x;
 	this.y = y;
-	this.dir_x = 0;
-	this.dir_y = 0;
-	this.vel_x = 0;
-	this.vel_y = 0;
-	this.id = id;
 }
 
-function Bullet(x, y, id, player_id, vel_x, vel_y){
-	this.x = x;
-	this.y = y;
-	this.id = id;
-	this.player_id = player_id;
+function Dir(dir_x,dir_y) {
+	this.dir_x = dir_x;
+	this.dir_y = dir_y;
+}
+function Vel(vel_x,vel_y) {
 	this.vel_x = vel_x;
 	this.vel_y = vel_y;
 }
+
+function Player(id,pos,dir,vel) { 
+	this.id = id;
+	this.pos = pos;
+	this.dir = dir;
+	this.vel = vel;
+}
+
+function Bullet(id,player_id,pos,vel){
+	this.id = id;
+	this.player_id = player_id;
+	this.pos = pos;
+	this.vel = vel;
+}			
 
 //Global Variables
 
