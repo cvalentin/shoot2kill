@@ -86,7 +86,7 @@ io.sockets.on('connection', function(socket) {
 });
 
 function game_update(){
-	for (var i = 0; i < all_players.length; i++) {
+	for (var i = 0; i < _all_players.length; i++) {
 		var curr_player = all_players[i];
 		curr_player.pos.x += curr_player.dir.dir_x * curr_player.vel.vel_x;
 		curr_player.pos.y += curr_player.dir.dir_y * curr_player.vel.vel_y;
@@ -94,7 +94,7 @@ function game_update(){
 	}
 
 	//update bullet positions
-	for (var i = 0; i < all_bullets.length; i++){
+	for (var i = 0; i < _all_bullets.length; i++){
 		var curr_bullet = all_bullets[i];
 		curr_bullet.pos.x += curr_bullet.vel.x;
 		curr_bullet.pos.y += curr_bullet.vel.y;
