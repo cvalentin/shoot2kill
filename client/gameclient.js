@@ -61,6 +61,9 @@ function update() {
 	
 	} 
 	if (KEYS_DOWN["backward"]) {
+		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		dirv.scalem(-7.5);
+		curplayer.vel = cons_point(dirv.x(),dirv.y()); 
 	
 	}
 	
