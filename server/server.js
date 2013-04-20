@@ -35,6 +35,10 @@ io.sockets.on('connection', function(socket) {
 		
 	});
 	
+	socket.on('disconnect', function(data){
+		_all_players.remove(data.id);
+	});
+
 	socket.on('fire', function(data) {
 		var tarplayer = find_player(data.id);
 		if (tarplayer) {	
@@ -108,8 +112,11 @@ function game_update(){
 		if (curr_bullet.ct <= 0) {
 			_all_bullets.remove(i);
 		} else {
+			for (var j = 0; j < _all_players.length; j++) {
+				var curr_player = _all_players[j];
+				
 			
-			
+			}
 		}
 	}
 	console.log(_all_bullets.length);
