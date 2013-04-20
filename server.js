@@ -1,6 +1,5 @@
 //Objects
 
-
 function Player(x,y,name,avatar,id) { 
 	this.x = x;
 	this.y = y;
@@ -11,25 +10,28 @@ function Player(x,y,name,avatar,id) {
 	this.id = id;
 }
 
-function Bullet(x, y, id, p_id){
+function Bullet(x, y, id, p_id) {
 	this.x = x;
 	this.y = y;
 	this.id = id;
 	this.vel_x = 0;
 	this.vel_y = 0;
 	this.player_id = p_id;
+}
+
+//Global Variables
 
 //user_id to use for creation, starts at 0, incrememnts per player created
-var user_id = 0;
+var _user_id = 0;
 
 //array of all players
-var all_players = [];
+var _all_players = [];
 
 //array of all bullets
-var all_bullets = [];
+var _all_bullets = [];
 
 //id for players, starts at 0, increment by 1 per player
-var player_id_set = 0;
+var _player_id_set = 0;
 
 // Start server -- Shiny code WOOO
 var stdin = process.openStdin();    
