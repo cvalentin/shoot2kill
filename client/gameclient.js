@@ -53,7 +53,9 @@ window.onload = function() {
 };
 
 function login() {
-	_socket.emit('player_request_id', {name: $('enter_name')},function(id){
+	var player_name = document.getElementById('enter_name').value.toString();
+	document.getElementById("login_button").disabled=true;
+	_socket.emit('player_request_id', {name: player_name},function(id){
 		_cur_player_id = id;
 	});
 }
