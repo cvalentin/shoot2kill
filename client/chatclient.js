@@ -3,7 +3,7 @@ var _chat_text = "";
 var _chat_messages = {"chat_messages":[]};
 
 function chat_keydown(e) {
-	if (event.keyCode == 13) { //enter
+	if (e.keyCode == 13) { //enter
 		_chat_text = $("#enter_chat").val();
 	} else {
 		return;
