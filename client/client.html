@@ -6,27 +6,27 @@
 		<script src="controls.js"></script>
 		<script src="gameclient.js"></script>
 		<script src="chatclient.js"></script>
-		<canvas id="game_canvas" width="500" height="500"></canvas>
-		<div id="login_area" style="position:absolute;top:10px;left:510px;" width="300" height="500">
-			<p style="color:white;" id="login_info">Enter Your Name Here:</p>
+		<canvas id="game_canvas" style="position:absolute;left:20px;top:20px;" width="500" height="500"></canvas>
+		<div id="login_area" style="position:absolute;top:0px;left:535px;" width="300" height="500">
+			<h1 style="background-color:white;display:block;text-align:center;width:300px;"> Enter Name </h1>
 			<textarea style="resize:none;width:200px;height:25px;" width="50" height="50" id="enter_name"></textarea>
-			<button onclick="login()" type="button" id="login_button">Join Game!</button>
+			<button onclick="login()" style="position:absolute;left:210px;top:81px;" type="button" id="login_button">Join Game!</button>
 		</div>
 
-		<div id="chat_area" style="position:absolute;top:90px;left:510px;width:300px;" width="300" height="500">
-			<p style="color:white" id="chat_info">Chat Area:</p>
-			<textarea style="width:300px;height:340px;" width="50" height="50" id="chat_output" readonly></textarea>
-			<input type="text" style="clear:left;" size="40" placeholder="Enter Chat" id="enter_chat" value=""/>
+		<div id="chat_area" style="position:absolute;top:120px;left:535px;width:300px;" width="300" height="500">
+			<h1 style="background-color:white;display:block;text-align:center;width:300px;"> Chat Area</h1>
+			<textarea style="width:300px;height:300px;" width="50" height="50" id="chat_output" readonly></textarea>
+			<input type="text" style="position:absolute;left:-1px;clear:left;" size="36" placeholder="Enter Chat" id="enter_chat" value=""/>
 		</div>
 
-		<div id="score_area" style="background-color:white;position:absolute;top:550px;left:10px;" width="500" height="300">
-			<h1 style="display:block;text-align:center;width:500px;"> Scoreboard </h1>
-			<div id="score_display" style="display:block;background-color:gray;height:300px;width:500px;">
-				<ol id="player_list" style="float:left;width:250px">
+		<div id="score_area" style="background-color:white;position:absolute;left:850px;top:20px;" width="300" height="450">
+			<h1 style="display:block;text-align:center;width:300px;"> Scoreboard </h1>
+			<div id="score_display" style="display:block;background-color:gray;height:425px;width:300px;">
+				<ol id="player_list" style="float:left;width:150px">
 				
 				</ol>
 
-				<ul id="score_list" style="float:left;width:150px">
+				<ul id="score_list" style="float:left;width:50px">
 
 				</ul>
 			</div>
