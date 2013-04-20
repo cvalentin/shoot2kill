@@ -352,6 +352,11 @@ function minimap_draw(jso) {
 	jso.walls.forEach(function(i) {
 		GLIB.draw_rect(i.x,i.y,i.width,i.height);
 	});
+	
+	
+	$("#rank").html("<b>SCORES</b><br/>");
+
+	var scoreboard = jso.scores;
 
 	jso.players.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,10,COLOR.GREEN);
@@ -360,6 +365,8 @@ function minimap_draw(jso) {
 		dvec.scalem(15);
 		GLIB.draw_circle(i.pos.x+dvec.x(),i.pos.y+dvec.y(),3,COLOR.GREEN);
 		GLIB.draw_name(i.name, i.pos.x - 30, i.pos.y + 33);
+		
+		$("#rank").append(i.name+" "+scoreboard[i.id]+"<br/>");
 	});
 
 	jso.bullets.forEach(function(i) {
@@ -386,6 +393,16 @@ function minimap_draw(jso) {
 	height:120px;
 	color:black;
 }
+#rank {
+	position:absolute;
+	left:0;
+	bottom:0;
+	z-index:50;
+	opacity:0.5;
+	background-color:gray;
+	padding:10px;
+	font-family:monospace;
+}
 </style>
 <div id="login">
 	<div id="loginform">
@@ -393,6 +410,8 @@ function minimap_draw(jso) {
 		<input type="text" id="name" placeholder="Enter Name" />
 		<input type="submit" id="play" value="Play" />	
 	</div>
+</div>
+<div id="rank">
 </div>
 <div id="chat_area">
 	<textarea width="50" height="50" id="chat_output" readonly></textarea><br/>
