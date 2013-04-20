@@ -11,10 +11,10 @@ includeInThisContext("./serverdef.js");
 
 var _all_players = [];
 var _all_bullets = [];
-var _all_scores = [];
+var _all_scores = []; 
 var _bullet_id = 0;
 
-//id for players, starts at 0, increment by 1 per player
+//id for players, starts at -1, increment by 1 per player
 var _player_id_set = -1;
 
 // Start server -- Shiny code WOOO
@@ -28,9 +28,10 @@ io.sockets.on('connection', function(socket) {
 	
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data, callback) { 		
+		_player_id_set++;
 		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(1,0), new Vel(0,0), data.name));
 		callback(_player_id_set);
-		_player_id_set++;
+		_all_scores[_player_id_set] = 0;
 	});
 	
 	socket.on('logoff', function(data){
@@ -96,7 +97,7 @@ function find_player(id) {
 }
 
 function gen_output() {
-	return {players: _all_players, bullets: _all_bullets, walls:[]};
+	return {players: _all_players, bullets: _all_bullets, walls:[], scores: _all_scores}
 }
 
 function game_update(){
@@ -125,5 +126,4 @@ function game_update(){
 			}
 		}
 	}
-	console.log(_all_players.length);
 }

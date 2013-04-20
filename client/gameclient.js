@@ -59,6 +59,7 @@ window.onbeforeunload = function(){
 function login() {
 	var player_name = document.getElementById('enter_name').value.toString();
 	document.getElementById("login_button").disabled=true;
+
 	_socket.emit('player_request_id', {name: player_name},function(id){
 		_cur_player_id = id;
 	});
@@ -118,6 +119,14 @@ function draw(jso) {
 		_g.translate(transvec.x(),transvec.y());
 	} 
 	
+	// Refresh scoreboard
+	var player_list = document.getElementById("player_list");
+	var score_list = document.getElementById("score_list");
+	player_list.innerHTML = "";
+	score_list.innerHTML = "";
+
+	var scoreboard = jso.scores;
+
 	jso.players.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,10,COLOR.GREEN);
 		var dvec = $V([i.dir.x,i.dir.y,0]);
@@ -125,10 +134,17 @@ function draw(jso) {
 		dvec.scalem(15);
 		GLIB.draw_circle(i.pos.x+dvec.x(),i.pos.y+dvec.y(),3,COLOR.GREEN);
 		
+		var new_player = document.createElement("li");
+		var new_score = document.createElement("li");
+		player_list.appendChild(new_player);
+		score_list.appendChild(new_score);
+		new_player.innerHTML = i.name;
+		new_score.innerHTML = scoreboard[i.id];
 	});
+
 	jso.bullets.forEach(function(i) {
 		GLIB.draw_circle(i.pos.x,i.pos.y,5,COLOR.RED);
 	});
-	
+
 	_g.restore();
 }
