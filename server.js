@@ -53,15 +53,20 @@ io.sockets.on('connection', function(socket) {
 
 	//create bullet
 	socket.on('create_bullet', function(data) {
+		var vec = new $V([all_players[data.player_id].dir_x, all_players[data.player_id].dir_y, 0]);
+		vec.normalizem();
+		vec.scalem(7);
 		all_bullets.push(
 			new Bullet(
 				all_players[data.player_id].x,
 				all_players[data.player_id].y,
 				bullet_id,
 				data.player_id,
-				all_players[]
-			)
-		)
+				vec.x(),
+				vec.y()
+			);
+		);
+		bullet_id++;
 	});
 
 
