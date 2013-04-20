@@ -11,8 +11,8 @@ includeInThisContext("./serverdef.js");
 var _all_players = [];
 var _all_messages = [];
 var _all_bullets = [];
-var _all_walls = [];
 var _all_scores = []; 
+var _all_walls = [new Wall(0,0,1,500), new Wall(0,0,500,1), new Wall(499, 0, 1, 500), new Wall(0, 499, 500, 1)];
 var _bullet_id = 0;
 
 //id for players, starts at -1, increment by 1 per player
@@ -30,9 +30,10 @@ io.sockets.on('connection', function(socket) {
 	io.sockets.emit('connect', gen_output());
 	
 	//give the player an id and add a new player object when an id is requested
-	socket.on('player_request_id', function(data, callback) { 		
-		_player_id_set++;
-		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(1,0), new Vel(0,0), data.name));
+	socket.on('player_request_id', function(data, callback) {
+		_player_id_set++; 
+		_all_players.push(new Player(_player_id_set, new Pos(250,250), new Dir(0,-1), new Vel(0,0), data.name));
+>>>>>>> 1bff91caed74f27415c06265780a174e4f2ad916
 		callback(_player_id_set);
 		_all_scores[_player_id_set] = 0;
 	});
@@ -84,7 +85,9 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on("move",function(data) {
 		var tarplayer = find_player(data.id);
-		if (tarplayer) tarplayer.vel = data.dirv;
+		if (tarplayer) {
+			tarplayer.vel = data.dirv;
+		}
 	});
 	
 });
@@ -100,7 +103,7 @@ function find_player(id) {
 }
 
 function gen_output() {
-	return {players: _all_players, bullets: _all_bullets, walls:[], scores: _all_scores}
+	return {players: _all_players, bullets: _all_bullets, walls: _all_walls, scores: _all_scores}
 }
 
 function game_update(){
@@ -123,7 +126,7 @@ function game_update(){
 		} else {
 			for (var j = 0; j < _all_players.length; j++) {
 				var curr_player = _all_players[j];
-				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 9) {
+				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 14) {
 					if(_all_players[j].health == 1){
 						_all_players[j].pos.x = 250;
 						_all_players[j].pos.y = 250;
