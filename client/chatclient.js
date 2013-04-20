@@ -2,13 +2,6 @@ var _chat_text = "";
 
 var _chat_messages = {"chat_messages":[]};
 
-window.onload = function() {
-	setInterval(function() {
-		chat_update();
-	},5000);
-	document.addEventListener("keydown", chat_keydown);
-};
-
 function chat_keydown(e) {
 	if (event.keyCode == 13 && document.activeElement.id=="enter_chat") { //enter
 		_chat_text = $("#enter_chat").val();

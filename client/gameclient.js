@@ -42,6 +42,11 @@ window.onload = function() {
 	},50);
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
+	
+	setInterval(function() {
+		chat_update();
+	},50);
+	document.addEventListener("keydown", chat_keydown);
 };
 
 function update() {
