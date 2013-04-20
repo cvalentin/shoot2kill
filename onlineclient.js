@@ -11,7 +11,7 @@ $("document").ready(function() {
 	});
 
 	socket.on('server_push', function(data){
-		//console.log(data);
+		console.log(data);
 	});
 
 			// io.sockets.emit('server_push', {players: _all_players, bullets: _all_bullets});
