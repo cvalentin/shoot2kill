@@ -83,7 +83,10 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on("move",function(data) {
 		var tarplayer = find_player(data.id);
-		if (tarplayer) tarplayer.vel = data.dirv;
+		if (tarplayer){
+
+		tarplayer.vel = data.dirv;
+		}
 	});
 	
 });
