@@ -52,6 +52,14 @@ window.onload = function() {
 	document.addEventListener("keyup",_controls_keyup);
 };
 
+function login() {
+	var player_name = document.getElementById('enter_name').value.toString();
+	document.getElementById("login_button").disabled=true;
+	_socket.emit('player_request_id', {name: player_name},function(id){
+		_cur_player_id = id;
+	});
+}
+
 function update() {
 	var curplayer = null;
 	_last_data.players.forEach(function(i) {
