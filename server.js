@@ -30,9 +30,6 @@ function Bullet(id,player_id,pos,vel){
 
 //Global Variables
 
-//user_id to use for creation, starts at 0, incrememnts per player created
-var _user_id = 0;
-
 //array of all players
 var _all_players = [];
 
@@ -61,8 +58,8 @@ io.sockets.on('connection', function(socket) {
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data) { 
 		data = eval(data)[0];
-		all_players.push(new Player(0,0,data.name,data.avatar,user_id));
-		user_id++;
+		all_players.push(new Player(0,0,data.name,data.avatar,_player_id_set));
+		_player_id_set++;
 	});
 
 	//create bullet
@@ -89,10 +86,14 @@ io.sockets.on('connection', function(socket) {
 });
 
 function game_update(){
+	for (var i = 0; i < all_players.length; i++) {
+		var curr_player = all_players[i];
+	
+	}
 
 	//update bullet positions
-	for (var i=0;i<all_bullets.length;i++){
-		curr_bullet = all_bullets[i];
+	for (var i = 0; i < all_bullets.length; i++){
+		var curr_bullet = all_bullets[i];
 		curr_bullet.x += curr_bullet.vel_x;
 		curr_bullet.y += curr_bullet.vel_y;
 		all_bullets[i] = curr_bullet;
