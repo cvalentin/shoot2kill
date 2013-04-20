@@ -149,7 +149,7 @@ function game_update(){
 		} else {
 			for (var j = 0; j < _all_players.length; j++) {
 				var curr_player = _all_players[j];
-				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 14) {
+				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 18) {
 					_all_players[j].pos.x = Math.random() * (_all_walls[0].height - 5);
 					_all_players[j].pos.y = Math.random() * (_all_walls[0].height - 5);
 					_all_scores[curr_bullet.player_id] += 10; // 10 points for kill
