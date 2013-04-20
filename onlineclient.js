@@ -1,8 +1,6 @@
 var socket;
 
-document.observe("dom:loaded", function() {
-	game_load();
-
+$("document").ready(function() {
 	socket = io.connect('http://127.0.0.1:1500');
 	
 	//send an inital socket message when connected
@@ -13,7 +11,7 @@ document.observe("dom:loaded", function() {
 	});
 
 	socket.on('server_push', function(data){
-		console.log(data);
+		//console.log(data);
 	});
 
 			// io.sockets.emit('server_push', {players: _all_players, bullets: _all_bullets});
