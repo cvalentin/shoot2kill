@@ -24,6 +24,8 @@
 	"bullets":
 		[
 			{
+				"id":0,
+				"player_id":0,
 				"pos":
 					{
 						"x":0,
