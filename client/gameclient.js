@@ -22,28 +22,14 @@ var GLIB = {
 	}
 };
 
-var KEYBOARD = {
-	"LEFT_ARROW":37,
-	"RIGHT_ARROW":39,
-	"UP_ARROW":38,
-	"DOWN_ARROW":40
-};
-
-var CONTROLS = {
-	"turnleft":[KEYBOARD.LEFT_ARROW],
-	"turnright":[KEYBOARD.RIGHT_ARROW],
-	"forward":[KEYBOARD.UP_ARROW],
-	"backward":[KEYBOARD.DOWN_ARROW]
-};
-
 var test = {
-	"playerid":1,
+	"playerid":0,
 	"players":[
-		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":1,"y":0}},
+		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":0.5,"y":0.5}},
 		{"id":1, "pos":{"x":150,"y":250}, "dir":{"x":0.5,"y":0.5}},
 		{"id":2, "pos":{"x":300,"y":80}, "dir":{"x":0.2,"y":0.7}}
 	],
-	"bullets":[{"pos":{"x":20,"y":20},"vel":{"x":0,"y":0}}],
+	"bullets":[{"pos":{"x":0,"y":0},"vel":{"x":0,"y":0}}],
 	"walls":[]
 };
 
@@ -54,11 +40,24 @@ window.onload = function() {
 	setInterval(function() {
 		update();
 	},50);
-	document.addEventListener("keydown", keydown);
-	document.addEventListener("keyup",keyup);
+	document.addEventListener("keydown", _controls_keydown);
+	document.addEventListener("keyup",_controls_keyup);
 };
 
 function update() {
+	var curplayer = test.players[test.playerid];
+	if (KEYS_DOWN["turnleft"]) {
+		curplayer.dir = rotate_by(curplayer.dir,0.135);
+		
+	} else if (KEYS_DOWN["turnright"]) {
+		//curplayer.dir = rotate_by(curplayer.dir,-0.5);
+	
+	} else if (KEYS_DOWN["forward"]) {
+	
+	} else if (KEYS_DOWN["backward"]) {
+	
+	}
+	
 	draw(test);
 }
 
@@ -86,11 +85,4 @@ function draw(jso) {
 	});
 	
 	_g.restore();
-}
-
-function keydown(e) {
-}
-
-function keyup(e) {
-
 }
