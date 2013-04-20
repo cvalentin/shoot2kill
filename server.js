@@ -92,8 +92,6 @@ function game_update(){
 	//update bullet positions
 	for (var i = 0; i < all_bullets.length; i++){
 		var curr_bullet = all_bullets[i];
-		curr_bullet.x += curr_bullet.vel_x;
-		curr_bullet.y += curr_bullet.vel_y;
 		curr_bullet.pos.x += curr_bullet.vel.x;
 		curr_bullet.pos.y += curr_bullet.vel.y;
 		all_bullets[i] = curr_bullet;

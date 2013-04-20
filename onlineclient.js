@@ -1,6 +1,8 @@
 var socket;
 
-$(document).ready(function() {
+document.observe("dom:loaded", function() {
+	game_load();
+
 	socket = io.connect('http://127.0.0.1:1500');
 	
 	//send an inital socket message when connected
@@ -19,5 +21,5 @@ function player_connect() {
 			console.log("id recieved:"+id);
 			_player_id = id;
 		}
-	);
+	)
 }
