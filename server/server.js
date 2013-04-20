@@ -11,7 +11,7 @@ includeInThisContext("./serverdef.js");
 var _all_players = [];
 var _all_messages = [];
 var _all_bullets = [];
-var _all_walls = [];
+var _all_walls = [new Wall(0,0,1,500), new Wall(0,0,500,1), new Wall(499, 0, 1, 500), new Wall(0, 499, 500, 1)];
 var _bullet_id = 0;
 
 //id for players, starts at 0, increment by 1 per player
@@ -99,7 +99,7 @@ function find_player(id) {
 }
 
 function gen_output() {
-	return {players: _all_players, bullets: _all_bullets, walls:[]};
+	return {players: _all_players, bullets: _all_bullets, walls:_all_walls};
 }
 
 function game_update(){
