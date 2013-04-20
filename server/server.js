@@ -38,6 +38,10 @@ io.sockets.on('connection', function(socket) {
 		
 	});
 	
+	socket.on('disconnect', function(data){
+		_all_players.remove(data.id);
+	});
+
 	socket.on('fire', function(data) {
 		var tarplayer = find_player(data.id);
 		if (tarplayer) {	
