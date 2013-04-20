@@ -123,7 +123,14 @@ function game_update(){
 			for (var j = 0; j < _all_players.length; j++) {
 				var curr_player = _all_players[j];
 				if (curr_bullet.player_id != curr_player.id && point_distance(curr_player.pos,curr_bullet.pos) <= 9) {
-					_all_players.remove(j);
+					if(_all_players[j].health == 1){
+						_all_players[j].pos.x = 250;
+						_all_players[j].pos.y = 250;
+						_all_players[j].health = 10;
+					}else{
+						_all_players[j].health--;
+					}
+					_all_bullets.remove(i);
 				}
 			}
 		}
