@@ -49,12 +49,20 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('logoff', function(data){
+<<<<<<< HEAD
+		//console.log("removing player");
+=======
+>>>>>>> f55d2e07e9fec41d9e8e4344ff6ebcbbbb1a5039
 		for(var i = 0; i < _all_players.length; i++) {
 			var cur_players = _all_players[i];
 			if (cur_players.id == data.id) {
 				_all_players.remove(i);
 			}
 		}
+<<<<<<< HEAD
+		//console.log("remove done");
+=======
+>>>>>>> f55d2e07e9fec41d9e8e4344ff6ebcbbbb1a5039
 	});
 
 	socket.on('fire', function(data) {
@@ -74,6 +82,7 @@ io.sockets.on('connection', function(socket) {
 			newbullet.ct = 100;
 			_all_bullets.push(newbullet);
 			_bullet_id++;
+			console.log(_all_bullets.length);
 		}
 	});
 
@@ -98,6 +107,10 @@ io.sockets.on('connection', function(socket) {
 		}
 
 
+<<<<<<< HEAD
+		//console.log(in_wall(tarplayer.pos.x, tarplayer.pos.y));
+=======
+>>>>>>> f55d2e07e9fec41d9e8e4344ff6ebcbbbb1a5039
 	});
 	
 });
