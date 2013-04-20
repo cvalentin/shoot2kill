@@ -7,15 +7,17 @@ function Player(x,y,name,avatar,id) {
 	this.avatar = avatar;
 	this.dir_x = 0;
 	this.dir_y = 0;
+	this.vel_x = 0;
+	this.vel_y = 0;
 	this.id = id;
 }
 
-function Bullet(x, y, id, p_id) {
+function Bullet(x, y, id, p_id, vel_x, vel_y){
 	this.x = x;
 	this.y = y;
 	this.id = id;
-	this.vel_x = 0;
-	this.vel_y = 0;
+	this.vel_x = vel_x;
+	this.vel_y = vel_y;
 	this.player_id = p_id;
 }
 
@@ -28,7 +30,8 @@ var _user_id = 0;
 var _all_players = [];
 
 //array of all bullets
-var _all_bullets = [];
+var all_bullets = [];
+var bullet_id = 0;
 
 //id for players, starts at 0, increment by 1 per player
 var _player_id_set = 0;
@@ -48,4 +51,19 @@ io.sockets.on('connection', function(socket) {
 		all_players.push(new Player(0,0,data.name,data.avatar,user_id);
 		user_id++;
 	});
+
+	//create bullet
+	socket.on('create_bullet', function(data) {
+		all_bullets.push(
+			new Bullet(
+				all_players[data.player_id].x,
+				all_players[data.player_id].y,
+				bullet_id,
+				data.player_id,
+				all_players[]
+			)
+		)
+	});
+
+
 });
