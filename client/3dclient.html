@@ -13,6 +13,7 @@ canvas {
 	left:0;
 }
 </style>
+<script src="controls.js"></script>
 <script src="http://127.0.0.1:1500/socket.io/socket.io.js"></script>
 <script src="./vector.js"></script>
 <script src="./Three.js"></script>
@@ -37,6 +38,8 @@ var _added_bullets = [];
 var _cur_player_id = 0;
 var _last_data;
 
+var enter_chat = null;
+
 
 window.onload = function() {
 	init();
@@ -51,6 +54,54 @@ window.onload = function() {
 		renderer.clear();
 		renderer.render( scene, camera );
 	});
+	
+	setInterval(function() {
+		update();
+	},50);
+	
+	_socket.emit('player_request_id', {name: "test"},function(id){
+		_cur_player_id = id;
+	});
+		document.addEventListener("keydown", _controls_keydown);
+	document.addEventListener("keyup",_controls_keyup);
+}
+
+function update() {
+	var curplayer = null;
+	if (!_last_data) return;
+	_last_data.players.forEach(function(i) {
+		if (i.id == _cur_player_id) curplayer = i;
+	});
+	if (!curplayer) {
+		return;
+	}
+	console.log(KEYS_DOWN);
+	
+	if (KEYS_DOWN["turnleft"]) {
+		console.log("left");
+		_socket.emit("turn",{"id":_cur_player_id,"theta":0.135});
+		
+	} 
+	if (KEYS_DOWN["turnright"]) {
+		_socket.emit("turn",{"id":_cur_player_id,"theta":-0.135});
+	
+	} 
+	if (KEYS_DOWN["forward"]) {
+		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		dirv.scalem(7.5);
+		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
+	
+	} 
+	if (KEYS_DOWN["backward"]) {
+		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		dirv.scalem(-7.5);
+		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
+	}
+}
+
+function fire() {
+	if(_cur_player_id < 0) return;
+	_socket.emit("fire",{"id":_cur_player_id});
 }
 
 function init() {
@@ -110,13 +161,11 @@ function draw(jso) {
 	});
 	
 	if (curplayer) {
-	//if (false) {
 		camera.position.set(curplayer.pos.x,curplayer.pos.y,50);
 		camera.lookAt({
 			x:curplayer.pos.x+curplayer.dir.x*10,
 			y:curplayer.pos.y+curplayer.dir.y*10,
 			z:50});
-		console.log(curplayer.pos.x+","+curplayer.pos.y);
 	} else {
 		camera.up.set(0,0,1);
 		camera.position.set(0,0,1000);
@@ -140,27 +189,6 @@ function cons_player(x,y) {
 	scene.add( player );
 	return player;
 }
-
-document.onkeydown = function(e) {
-return;
-	if (e.keyCode == 37) {//lurd
-		_dirv = rotate_by(_dirv,0.3);
-		
-	} else if (e.keyCode == 38) {
-		_pos.x += _dirv.x*20;
-		_pos.y += _dirv.y*20;
-	
-	} else if (e.keyCode == 39) {
-		_dirv = rotate_by(_dirv,-0.3);;
-	
-	} else if (e.keyCode == 40) {
-		_pos.x -= _dirv.x*20;
-		_pos.y -= _dirv.y*20;
-	}
-	camera.position.set(_pos.x,_pos.y,50);
-	camera.lookAt({x:_pos.x+_dirv.x*10,y:_pos.y+_dirv.y*10,z:50});
-}
-
 
 </script>
 
