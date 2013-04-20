@@ -49,15 +49,12 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('logoff', function(data){
-		console.log("removing player");
 		for(var i = 0; i < _all_players.length; i++) {
 			var cur_players = _all_players[i];
 			if (cur_players.id == data.id) {
 				_all_players.remove(i);
-				console.log("removed one");
 			}
 		}
-		console.log("remove done");
 	});
 
 	socket.on('fire', function(data) {
@@ -77,6 +74,7 @@ io.sockets.on('connection', function(socket) {
 			newbullet.ct = 50;
 			_all_bullets.push(newbullet);
 			_bullet_id++;
+			console.log(_all_bullets.length);
 		}
 	});
 
@@ -101,7 +99,6 @@ io.sockets.on('connection', function(socket) {
 		}
 
 
-		console.log(in_wall(tarplayer.pos.x, tarplayer.pos.y));
 	});
 	
 });
