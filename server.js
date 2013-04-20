@@ -18,4 +18,11 @@ function Bullet(x, y, id, p_id){
 	this.vel_x = 0;
 	this.vel_y = 0;
 	this.player_id = p_id;
-}
+
+//array of all players
+var _all_players = [];
+
+//id for players, starts at 0, increment by 1 per player
+var _player_id_set = 0;
+
+
