@@ -19,13 +19,8 @@ function point_distance(a,b) {
 function rotate_by(pt,theta) {
 	var len = point_distance(pt,cons_point(0,0));
 	var curtheta = Math.atan2(pt.y,pt.x);
-	
-	console.log("theta_pre:"+curtheta);
-	curtheta += 0.05;
-	console.log("theta_post:"+curtheta);
-	
+	curtheta += theta;
 	var rtp = cons_point(Math.cos(curtheta),Math.sin(curtheta));
-	
 	return rtp;
 }
 

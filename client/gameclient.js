@@ -25,9 +25,9 @@ var GLIB = {
 var test = {
 	"playerid":0,
 	"players":[
-		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":0.5,"y":0.5}},
-		{"id":1, "pos":{"x":150,"y":250}, "dir":{"x":0.5,"y":0.5}},
-		{"id":2, "pos":{"x":300,"y":80}, "dir":{"x":0.2,"y":0.7}}
+		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
+		{"id":1, "pos":{"x":150,"y":250}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
+		{"id":2, "pos":{"x":300,"y":80}, "dir":{"x":0.2,"y":0.7}, "vel":{"x":0,"y":0}}
 	],
 	"bullets":[{"pos":{"x":0,"y":0},"vel":{"x":0,"y":0}}],
 	"walls":[]
@@ -47,16 +47,30 @@ window.onload = function() {
 function update() {
 	var curplayer = test.players[test.playerid];
 	if (KEYS_DOWN["turnleft"]) {
-		curplayer.dir = rotate_by(curplayer.dir,0.135);
+		curplayer.dir = rotate_by(curplayer.dir,-0.135);
 		
-	} else if (KEYS_DOWN["turnright"]) {
-		//curplayer.dir = rotate_by(curplayer.dir,-0.5);
+	} 
+	if (KEYS_DOWN["turnright"]) {
+		curplayer.dir = rotate_by(curplayer.dir,0.135);
 	
-	} else if (KEYS_DOWN["forward"]) {
+	} 
+	if (KEYS_DOWN["forward"]) {
+		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		dirv.scalem(7.5);
+		curplayer.vel = cons_point(dirv.x(),dirv.y()); 
 	
-	} else if (KEYS_DOWN["backward"]) {
+	} 
+	if (KEYS_DOWN["backward"]) {
 	
 	}
+	
+	test.players.forEach(function(i) {
+		i.pos.x += i.vel.x;
+		i.pos.y += i.vel.y;
+		
+		i.vel.x *= 0.5;
+		i.vel.y *= 0.5;
+	});
 	
 	draw(test);
 }
