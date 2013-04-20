@@ -26,6 +26,7 @@ function Bullet(id,player_id,pos,vel){
 	this.player_id = player_id;
 	this.pos = pos;
 	this.vel = vel;
+	this.health = 1;
 }	
 
 function Walls(){
@@ -108,6 +109,12 @@ function game_update(){
 		var curr_player = _all_players[i];
 		curr_player.pos.x += curr_player.vel.vel_x;
 		curr_player.pos.y += curr_player.vel.vel_y;
+
+		if (curr_player.health == 0){
+			curr_player.pos.x = 0;
+			curr_player.pox.y = 0;
+			curr-player.health = 1;
+		}
 	}
 
 	//update bullet positions
