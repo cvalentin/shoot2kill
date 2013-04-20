@@ -21,11 +21,12 @@ function Vel(vel_x,vel_y) {
 	this.y = vel_y;
 }
 
-function Player(id,pos,dir,vel) { 
+function Player(id,pos,dir,vel, name) { 
 	this.id = id;
 	this.pos = pos;
 	this.dir = dir;
 	this.vel = vel;
+	this.name = name;
 }
 
 function Bullet(id,player_id,pos,vel){
@@ -75,8 +76,9 @@ io.sockets.on('connection', function(socket) {
 	io.sockets.emit('connect', gen_output());
 	
 	//give the player an id and add a new player object when an id is requested
-	socket.on('player_request_id', function(data) { 
-		_all_players.push(new Player(_player_id_set, new Pos(0,0), new Dir(0,0), new Vel(0,0)));
+	socket.on('player_request_id', function(data, callback) { 
+		_all_players.push(new Player(_player_id_set, new Pos(0,0), new Dir(0,0), new Vel(0,0), data.name));
+		callback(_player_id_set);
 		_player_id_set++;
 	});
 

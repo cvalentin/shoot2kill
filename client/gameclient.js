@@ -52,6 +52,12 @@ window.onload = function() {
 	document.addEventListener("keyup",_controls_keyup);
 };
 
+function login() {
+	_socket.emit('player_request_id', {name: $('enter_name')},function(id){
+		_cur_player_id = id;
+	});
+}
+
 function update() {
 	var curplayer = null;
 	_last_data.players.forEach(function(i) {
