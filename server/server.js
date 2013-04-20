@@ -1,4 +1,11 @@
 //Objects
+var fs = require('fs');
+var vm = require('vm');
+var includeInThisContext = function(path) {
+    var code = fs.readFileSync(path);
+    vm.runInThisContext(code, path);
+}.bind(this);
+includeInThisContext("./chatserver.js");
 
 function Pos(x,y) {
 	this.x = x;
@@ -14,11 +21,12 @@ function Vel(vel_x,vel_y) {
 	this.y = vel_y;
 }
 
-function Player(id,pos,dir,vel) { 
+function Player(id,pos,dir,vel, name) { 
 	this.id = id;
 	this.pos = pos;
 	this.dir = dir;
 	this.vel = vel;
+	this.name = name;
 }
 
 function Bullet(id,player_id,pos,vel){
@@ -62,12 +70,15 @@ io.set('log level', 1);
 _all_players.push(new Player(0,new Pos(150,150),new Dir(1,0),new Vel(0,0)));
 
 io.sockets.on('connection', function(socket) {
-	//post a welcome message
+	
+	socket.on('chat_enter',chat_enter);
+
 	io.sockets.emit('connect', gen_output());
 	
 	//give the player an id and add a new player object when an id is requested
-	socket.on('player_request_id', function(data) { 
-		_all_players.push(new Player(_player_id_set, new Pos(0,0), new Dir(0,0), new Vel(0,0)));
+	socket.on('player_request_id', function(data, callback) { 
+		_all_players.push(new Player(_player_id_set, new Pos(0,0), new Dir(0,0), new Vel(0,0), data.name));
+		callback(_player_id_set);
 		_player_id_set++;
 	});
 
@@ -89,6 +100,7 @@ io.sockets.on('connection', function(socket) {
 
 	var update_game = setInterval(function (){
 		io.sockets.emit('server_push', gen_output());
+		io.sockets.emit('chat_push', chat_output());
 	}, 50)
 	
 	setInterval(function() {
