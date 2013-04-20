@@ -15,3 +15,15 @@ function cons_point(x,y) {
 function point_distance(a,b) {
 	return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2));
 }
+
+function rotate_by(pt,theta) {
+	var len = point_distance(pt,cons_point(0,0));
+	var curtheta = Math.atan2(pt.y,pt.x);
+	curtheta += theta;
+	var rtp = cons_point(Math.cos(curtheta),Math.sin(curtheta));
+	return rtp;
+}
+
+function pt2s(pt) {
+	return "{"+pt.x+","+pt.y+"}";
+}

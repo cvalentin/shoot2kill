@@ -30,9 +30,6 @@ function Bullet(id,player_id,pos,vel){
 
 //Global Variables
 
-//user_id to use for creation, starts at 0, incrememnts per player created
-var _user_id = 0;
-
 //array of all players
 var _all_players = [];
 
@@ -87,6 +84,10 @@ io.sockets.on('connection', function(socket) {
 });
 
 function game_update(){
+	for (var i = 0; i < all_players.length; i++) {
+		var curr_player = all_players[i];
+	
+	}
 
 	//update bullet positions
 	for (var i = 0; i < all_bullets.length; i++){
@@ -95,5 +96,4 @@ function game_update(){
 		curr_bullet.pos.y += curr_bullet.vel.y;
 		all_bullets[i] = curr_bullet;
 	}
-
 }
