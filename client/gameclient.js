@@ -62,6 +62,7 @@ window.onload = function() {
 };
 
 window.onbeforeunload = function(){
+
     _socket.emit('logoff', {id:_cur_player_id});
   }
 
