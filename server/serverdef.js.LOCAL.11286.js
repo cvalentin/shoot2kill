@@ -12,13 +12,13 @@ function Vel(vel_x,vel_y) {
 	this.y = vel_y;
 }
 
-function Player(id,pos,dir,vel,name) { 
+function Player(id,pos,dir,vel,name,score) { 
 	this.id = id;
 	this.pos = pos;
 	this.dir = dir;
 	this.vel = vel;
 	this.name = name;
-	this.health = 10;
+	this.score = score;
 }
 
 function Bullet(id,player_id,pos,vel){
@@ -28,22 +28,8 @@ function Bullet(id,player_id,pos,vel){
 	this.vel = vel;
 }	
 
-function Wall(x, y, width, height){
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
+function Walls(){
 }
-
-/*
-hardcoded wall
-x = 0;
-y = 0;
-width = 500;
-height = 1;
-
-
-*/
 
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);

@@ -21,6 +21,3 @@ function chat_push(data) {
 	}
 	$("#chat_output").val(chat_update_text);
 }
-
-function chat_update() {
-}
