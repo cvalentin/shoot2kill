@@ -23,7 +23,6 @@ var GLIB = {
 };
 
 var test = {
-	"playerid":0,
 	"players":[
 		{"id":0, "pos":{"x":50,"y":50}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
 		{"id":1, "pos":{"x":150,"y":250}, "dir":{"x":0.5,"y":0.5}, "vel":{"x":0,"y":0}},
@@ -33,20 +32,36 @@ var test = {
 	"walls":[]
 };
 
+var _socket = io.connect('http://127.0.0.1:1500');
+var _cur_player_id = 0;
+var tmp = null;
+
 window.onload = function() {
+
+	_socket.on('connect', function(data){
+		draw(data);
+	});
+	
+	_socket.on('server_push', function(data){
+		console.log(data);
+		draw(data);
+	});
+
 	_g = $("#game_canvas")[0].getContext("2d");
 	SCRN.WID = $("#game_canvas").width();
 	SCRN.HEI = $("#game_canvas").height();
-	setInterval(function() {
+	/*setInterval(function() {
 		update();
-	},50);
+	},50);*/
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
 	
+	/*
 	setInterval(function() {
 		chat_update();
 	},50);
-	document.addEventListener("keydown", chat_keydown);
+	*/
+	//document.addEventListener("keydown", chat_keydown);
 };
 
 function update() {
@@ -83,13 +98,17 @@ function update() {
 	draw(test);
 }
 
+function fire() {
+	console.log("fire");
+}
+
 function draw(jso) {
 	_g.save();
 	
 	GLIB.clear_screen();
 	
 	var center = cons_point(SCRN.WID/2,SCRN.HEI/2);
-	var curplayer = jso.players.filter(function(i) { return jso.playerid == i.id; })[0].pos;
+	var curplayer = jso.players.filter(function(i) { return _cur_player_id == i.id; })[0].pos;
 	
 	var transvec = $V([center.x-curplayer.x,center.y-curplayer.y,0]);
 	_g.translate(transvec.x(),transvec.y());

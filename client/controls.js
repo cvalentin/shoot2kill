@@ -29,6 +29,8 @@ function _controls_keydown(e) {
 	} else if (CONTROLS.backward.indexOf(e.keyCode)!=-1) {
 		KEYS_DOWN.backward = 1;
 		
+	} else if (CONTROLS.fire.indexOf(e.keyCode)!=-1) {
+		fire();
 	}
 }
 
