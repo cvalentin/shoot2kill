@@ -12,7 +12,7 @@ var _all_players = [];
 var _all_messages = [];
 var _all_bullets = [];
 var _all_scores = []; 
-var _all_walls = [new Wall(0,0,500,-500), new Wall(-500,0,500,500), new Wall(500, 500, 500, 500), new Wall(0, 1000, 500, 500)];
+var _all_walls = [new Wall(0,-500,500,500),new Wall(-500,0,500,500),new Wall(0,500,500,500),new Wall(500,0,500,500)];
 var _bullet_id = 0;
 
 //id for players, starts at -1, increment by 1 per player

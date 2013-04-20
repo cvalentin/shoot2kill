@@ -129,8 +129,6 @@ function draw(jso) {
 		_lcp = curplayer;
 		var transvec = $V([center.x-curplayer.pos.x,center.y-curplayer.pos.y,0]);
 		_g.translate(transvec.x(),transvec.y());
-		//_g.translate(-curplayer.pos.x,-curplayer.pos.y);
-		//console.log(-curplayer.pos.x+","+(-curplayer.pos.y));
 	}
 	
 
