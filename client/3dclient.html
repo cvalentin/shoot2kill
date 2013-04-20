@@ -7,12 +7,20 @@
 </head>
 <body style="overflow:hidden;">
 <style>
-canvas {
+canvas:not(#game_canvas) {
 	position:absolute;
 	top:0;
 	left:0;
 }
+#game_canvas {
+	position:absolute;
+	z-index:20;
+	top:0px;
+	right:0px;
+	opacity:0.5;
+}
 </style>
+<script src="http://spotcos.com/jquery.js"></script>
 <script src="controls.js"></script>
 <script src="http://127.0.0.1:1500/socket.io/socket.io.js"></script>
 <script src="./vector.js"></script>
@@ -23,6 +31,39 @@ Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
+};
+
+var _g;
+var SCRN = {"WID":0,"HEI":0};
+
+var COLOR = {
+	"RED":"#FF0000",
+	"GREEN":"#00FF00",
+	"BLUE":"#0000FF",
+	"WHITE":"#FFFFFF",
+	"BLACK":"#000000"
+}
+
+var GLIB = {
+	"draw_circle":function(x,y,rad,color) {
+		_g.beginPath();
+		_g.arc(x,y, rad, 0, 2 * Math.PI, false);
+		_g.fillStyle = color;
+		_g.fill();
+	},
+	"clear_screen":function() {
+		_g.fillStyle = COLOR.WHITE;
+		_g.fillRect(0,0,SCRN.WID*5,SCRN.HEI*5);
+	},
+	"draw_rect":function(x,y,width,height) {
+		_g.fillStyle = COLOR.BLUE;
+		_g.fillRect(x,y,width,height);
+	},
+	"draw_name":function(name, x,y){
+		_g.fillStyle = COLOR.BLACK;
+		_g.font = "8px Arial";
+		_g.fillText(name, x, y);
+	}
 };
 
 
@@ -53,6 +94,7 @@ window.onload = function() {
 		draw(_last_data);
 		renderer.clear();
 		renderer.render( scene, camera );
+		minimap_draw(data);
 	});
 	
 	setInterval(function() {
@@ -62,8 +104,13 @@ window.onload = function() {
 	_socket.emit('player_request_id', {name: "test"},function(id){
 		_cur_player_id = id;
 	});
-		document.addEventListener("keydown", _controls_keydown);
+	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
+	
+	_g = $("#game_canvas")[0].getContext("2d");
+	SCRN.WID = $("#game_canvas").width();
+	SCRN.HEI = $("#game_canvas").height();
+	GLIB.clear_screen();
 }
 
 function update() {
@@ -246,7 +293,51 @@ function cons_player(x,y) {
 	return player;
 }
 
-</script>
+function minimap_draw(jso) {
+	if (!jso) return;
+	_g.save();
+	_g.scale(0.6,0.6);
+	GLIB.clear_screen();
+	
+	var center = cons_point((SCRN.WID/2)*(1/0.6),SCRN.HEI/2*(1/0.6));
+	
+	var curplayer = null;
+	jso.players.forEach(function(i) {
+		if (i.id == _cur_player_id) {
+			curplayer = i;
+		}
+	});
+	if (curplayer) {
+		_lcp = curplayer;
+		var transvec = $V([center.x-curplayer.pos.x,center.y-curplayer.pos.y,0]);
+		_g.translate(transvec.x(),transvec.y());
+	}
+	
 
+	jso.walls.forEach(function(i) {
+		GLIB.draw_rect(i.x,i.y,i.width,i.height);
+	});
+
+	jso.players.forEach(function(i) {
+		GLIB.draw_circle(i.pos.x,i.pos.y,10,COLOR.GREEN);
+		var dvec = $V([i.dir.x,i.dir.y,0]);
+		dvec.normalizem();
+		dvec.scalem(15);
+		GLIB.draw_circle(i.pos.x+dvec.x(),i.pos.y+dvec.y(),3,COLOR.GREEN);
+		GLIB.draw_name(i.name, i.pos.x - 7.5, i.pos.y + 17);
+	});
+
+	jso.bullets.forEach(function(i) {
+		GLIB.draw_circle(i.pos.x,i.pos.y,5,COLOR.RED);
+	});
+
+	_g.restore();
+}
+
+
+</script>
+<div id="test">
+	<canvas id="game_canvas" width="250" height="250"></canvas>
+</div>
 </body>
 </html>
