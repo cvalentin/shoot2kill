@@ -33,7 +33,6 @@ io.sockets.on('connection', function(socket) {
 	socket.on('player_request_id', function(data, callback) {
 		_player_id_set++; 
 		_all_players.push(new Player(_player_id_set, new Pos(250,250), new Dir(0,-1), new Vel(0,0), data.name));
->>>>>>> 1bff91caed74f27415c06265780a174e4f2ad916
 		callback(_player_id_set);
 		_all_scores[_player_id_set] = 0;
 	});
