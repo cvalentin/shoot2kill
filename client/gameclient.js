@@ -66,7 +66,6 @@ function update() {
 		
 	} 
 	if (KEYS_DOWN["turnright"]) {
-		//curplayer.dir = rotate_by(curplayer.dir,0.135);
 		_socket.emit("turn",{"id":_cur_player_id,"theta":0.135});
 	
 	} 
@@ -77,15 +76,15 @@ function update() {
 	
 	} 
 	if (KEYS_DOWN["backward"]) {
-		/*var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
+		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
 		dirv.scalem(-7.5);
-		curplayer.vel = cons_point(dirv.x(),dirv.y()); */
+		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
 	
 	}
 }
 
 function fire() {
-	console.log("fire");
+	_socket.emit("fire",{"id":_cur_player_id});
 }
 
 function draw(jso) {
