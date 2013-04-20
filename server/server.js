@@ -111,8 +111,11 @@ function game_update(){
 		if (curr_bullet.ct <= 0) {
 			_all_bullets.remove(i);
 		} else {
+			for (var j = 0; j < _all_players.length; j++) {
+				var curr_player = _all_players[j];
+				
 			
-			
+			}
 		}
 	}
 	console.log(_all_bullets.length);
