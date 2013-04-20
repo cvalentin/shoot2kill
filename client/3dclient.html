@@ -77,7 +77,6 @@ function update() {
 	}
 	
 	if (KEYS_DOWN["turnleft"]) {
-		console.log("left");
 		_socket.emit("turn",{"id":_cur_player_id,"theta":0.135});
 		
 	} 
@@ -103,7 +102,6 @@ function fire() {
 	_socket.emit("fire",{"id":_cur_player_id});
 }
 
-var _testwall;
 
 function init() {
 	scene = new THREE.Scene();
@@ -119,7 +117,7 @@ function init() {
 
 	var wallTexture = new THREE.ImageUtils.loadTexture( 'images/wall.png' );
 	wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping; 
-	wallTexture.repeat.set(20,20);
+	wallTexture.repeat.set(1,1);
 	var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture, side: THREE.DoubleSide } );
 	MATS.WALL = wallMaterial;
 	
@@ -142,44 +140,45 @@ function init() {
 	var bullet_material = new THREE.SpriteMaterial( { map: bullet_texture, useScreenCoordinates: false, color: 0xffffff } );
 	MATS.BULLET = bullet_material;
 	camera.up.set(0,0,1);
-	
-	
-	var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(0,0,0));
-    geometry.vertices.push(new THREE.Vector3(100,0,0));
-    geometry.vertices.push(new THREE.Vector3(100,0,100));
-    geometry.vertices.push(new THREE.Vector3(0,0,100));
-	geometry.faces.push(new THREE.Face4(0, 1, 2, 3));
-	geometry.faceVertexUvs[0].push([
-	  new THREE.UV(0, 0),
-	  new THREE.UV(1, 0),
-	  new THREE.UV(1, 1),
-	  new THREE.UV(0, 1)
-	]);
-	geometry.computeFaceNormals();
-	geometry.computeCentroids();
-	geometry.computeVertexNormals();
-	var wall= new THREE.Mesh( geometry, MATS.FLOOR);
-	scene.add(wall);
-	
-	/*
-    var geom = new THREE.Geometry();
-    geom.vertices.push(new THREE.Vector3(0,0,0));
-    geom.vertices.push(new THREE.Vector3(100,0,0));
-    geom.vertices.push(new THREE.Vector3(100,0,100));
-    geom.vertices.push(new THREE.Vector3(0,0,100));
-    
-    
-    geom.faces.push( new THREE.Face4( 0, 1, 2, 3 ) );
-    geom.computeFaceNormals();
-    
-    wall= new THREE.Mesh( geom, wallMaterial );
-    //wall= new THREE.Mesh( geom, new THREE.MeshNormalMaterial({side: THREE.DoubleSide, color:0x999999}) );
-    scene.add(wall);
-    */
 }
 
-var wall;
+function cons_wall(x,y,wid,hei) {
+	var wallgeo = new THREE.PlaneGeometry(wid, 500, 10, 10);
+	wall = new THREE.Mesh(wallgeo, MATS.WALL);
+	wall.rotation.x = Math.PI/2;
+	wall.translateX(wid/2);
+	_walls.push(wall);
+	scene.add(wall);
+	
+	wall = new THREE.Mesh(wallgeo, MATS.WALL);
+	wall.rotation.x = Math.PI/2;
+	wall.rotation.y = Math.PI/2;
+	wall.translateY(-wid/2);
+	_walls.push(wall);
+	scene.add(wall);
+	
+
+	wall = new THREE.Mesh(wallgeo, MATS.WALL);
+	wall.rotation.x = Math.PI/2;
+	wall.rotation.y = Math.PI/2;
+	wall.translateY(-wid/2);
+	wall.translateX(wid);
+	_walls.push(wall);
+	scene.add(wall);
+	
+	wall = new THREE.Mesh(wallgeo, MATS.WALL);
+	wall.rotation.x = Math.PI/2;
+	wall.translateX(wid/2);
+	wall.translateY(-hei);
+	_walls.push(wall);
+	scene.add(wall);
+}
+
+var _walls = [];
+
+window.onbeforeunload = function(){
+	_socket.emit('logoff', {id:_cur_player_id});
+}
 
 function draw(jso) {
 	if (!jso) return;
@@ -187,23 +186,26 @@ function draw(jso) {
 	while(scene.children.length > 0) {
 		scene.remove(scene.children[0]);
 	}
-	_added_players = [];
-	_added_bullets= [];
 	scene.add(floor);
 	var curplayer = null;
 	
-
-	scene.add(wall);
+	if (_walls.length == 0) {
+		jso.walls.forEach(function(i) {
+			cons_wall(i.x,i.y,i.width,i.height);
+		});
+	} else {
+		_walls.forEach(function(i){
+			scene.add(i);
+		});
+	}
 	
 	jso.players.forEach(function(i) {
 		var cgetp = cons_player(i.pos.x,i.pos.y);
 		if (i.id == _cur_player_id) curplayer = i;
-		_added_players.push(cgetp);
 	});
 	
 	jso.bullets.forEach(function(i) {
 		var cgetb = cons_bullet(i.pos.x,i.pos.y);
-		_added_bullets.push(cgetb);
 	});
 	
 	if (curplayer) {
