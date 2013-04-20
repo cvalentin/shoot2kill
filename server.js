@@ -26,7 +26,10 @@ function Bullet(id,player_id,pos,vel){
 	this.player_id = player_id;
 	this.pos = pos;
 	this.vel = vel;
-}			
+}	
+
+function Walls(){
+}		
 
 //Global Variables
 
@@ -81,7 +84,7 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	var update_game = setInterval(function (){
-		io.sockets.emit('server_push', {players: _all_players, bullets: _all_bullets});
+		io.sockets.emit('server_push', {players: _all_players, bullets: _all_bullets, walls:[]});
 	}, 50)
 });
 
