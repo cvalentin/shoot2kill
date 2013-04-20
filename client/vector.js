@@ -21,7 +21,8 @@ function is_movable(player) {
 	var y = player.pos.y;
 	var vel_x = player.vel.x;
 	var vel_y = player.vel.y;
-	return (x + vel_x > 10 & x + vel_x < 490 && y + vel_y > 10 && y + vel_y < 490);
+
+	return (x + vel_x > 10 && x + vel_x < 490 && y + vel_y > 10 && y + vel_y < 490);
 }
 
 function rotate_by(pt,theta) {

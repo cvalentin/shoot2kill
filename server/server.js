@@ -12,7 +12,7 @@ var _all_players = [];
 var _all_messages = [];
 var _all_bullets = [];
 var _all_scores = []; 
-var _all_walls = [new Wall(0,0,1,500), new Wall(0,0,500,1), new Wall(499, 0, 1, 500), new Wall(0, 499, 500, 1)];
+var _all_walls = [new Wall(0,0,500,-500), new Wall(-500,0,500,500), new Wall(500, 500, 500, 500), new Wall(0, 1000, 500, 500)];
 var _bullet_id = 0;
 
 //id for players, starts at -1, increment by 1 per player
@@ -85,23 +85,24 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on("move",function(data) {
 		var tarplayer = find_player(data.id);
-		if (tarplayer){ tarplayer.vel = data.dirv;	
-			console.log(tarplayer.vel);
-		}		
+		if (tarplayer){ 
+				tarplayer.vel = data.dirv;
+		}
+
+		if(in_wall(tarplayer.pos.x, tarplayer.pos.y)){
+			tarplayer.vel = -data.dirv;
+		}				
 	});
 	
 });
 
 function in_wall(x, y) {
-		var test = false;
         _all_walls.forEach(function(w){
         	if (((x > w.x) && (x < w.x + w.width)) && ((y > w.y) && (y < w.y + w.height))){
-        		console.log(w);
-        		test = true;
+        		return true;
         	}
         });
-        console.log(test);
-	    return test;
+        return false;
     }
 
 function find_player(id) {
@@ -124,10 +125,10 @@ function game_update(){
 
 		curr_player.pos.x += curr_player.vel.x;
 		curr_player.pos.y += curr_player.vel.y;
-			
+		
 		curr_player.vel.x*=0.5;
 		curr_player.vel.y*=0.5;
-
+		
 	}
 	
 	for (var i = 0; i < _all_bullets.length; i++){
