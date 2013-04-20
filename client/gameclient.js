@@ -31,7 +31,7 @@ var GLIB = {
 	}
 };
 
-var _socket = io.connect('http://127.0.0.1:1500');
+var _socket = io.connect('http://54.215.1.193:1500');
 var _cur_player_id = -1;
 var _last_data;
 

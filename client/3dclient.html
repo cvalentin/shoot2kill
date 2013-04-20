@@ -39,7 +39,7 @@ canvas:not(#game_canvas) {
 <script src="http://spotcos.com/jquery.js"></script>
 <script src="controls.js"></script>
 <script src="chatclient.js"></script>
-<script src="http://127.0.0.1:1500/socket.io/socket.io.js"></script>
+<script src="http://54.215.1.193:1500/socket.io/socket.io.js"></script>
 <script src="./vector.js"></script>
 <script src="./Three.js"></script>
 
@@ -84,7 +84,7 @@ var GLIB = {
 };
 
 
-var _socket = io.connect('http://127.0.0.1:1500');
+var _socket = io.connect('http://54.215.1.193:1500');
 
 var MATS = {}
 
@@ -395,6 +395,10 @@ function minimap_draw(jso) {
 	width:260px;
 	height:120px;
 	color:black;
+	width:250px;
+}
+#enter_chat {
+	width:250px;
 }
 #rank {
 	position:absolute;

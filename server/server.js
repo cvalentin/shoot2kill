@@ -98,7 +98,7 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on("turn",function(data) {
 		var tarplayer = find_player(data.id);
-		if (tarplayer) tarplayer.dir = rotate_by(tarplayer.dir,data.theta);
+		if (tarplayer) tarplayer.dir = rotate_by(tarplayer.dir,data.theta * 0.75);
 	});
 	
 	socket.on("move",function(data) {
