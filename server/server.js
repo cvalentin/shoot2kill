@@ -5,11 +5,11 @@ var includeInThisContext = function(path) {
     var code = fs.readFileSync(path);
     vm.runInThisContext(code, path);
 }.bind(this);
-includeInThisContext("./chatserver.js");
 includeInThisContext("../client/vector.js");
 includeInThisContext("./serverdef.js");
 
 var _all_players = [];
+var _all_messages = [];
 var _all_bullets = [];
 var _all_walls = [];
 var _bullet_id = 0;
@@ -136,4 +136,19 @@ function game_update(){
 		}
 	}
 	console.log(_all_players.length);
+}
+
+function chat_enter(data) {
+	for (var j = 0; j < _all_players.length; j++) {
+		if (_all_players[j].id == data.id) {
+			_all_messages.push(_all_players[j].name + ": "+data.text+"\n");
+			return;
+		}
+	}
+	//if no matches found, not logged in, so output as anonymous
+	_all_messages.push("Anonymous: "+data.text+"\n");
+}
+
+function chat_output() {
+	return {chat_messages:_all_messages};
 }
