@@ -6,7 +6,6 @@ var includeInThisContext = function(path) {
     vm.runInThisContext(code, path);
 }.bind(this);
 includeInThisContext("./chatserver.js");
-chat_init();
 
 function Pos(x,y) {
 	this.x = x;
@@ -70,7 +69,9 @@ io.set('log level', 1);
 _all_players.push(new Player(0,new Pos(150,150),new Dir(1,0),new Vel(0,0)));
 
 io.sockets.on('connection', function(socket) {
-	//post a welcome message
+	
+	socket.on('chat_enter',chat_enter);
+
 	io.sockets.emit('connect', gen_output());
 	
 	//give the player an id and add a new player object when an id is requested
@@ -97,6 +98,7 @@ io.sockets.on('connection', function(socket) {
 
 	var update_game = setInterval(function (){
 		io.sockets.emit('server_push', gen_output());
+		io.sockets.emit('chat_push', chat_output());
 	}, 50)
 	
 	setInterval(function() {
