@@ -1,0 +1,10 @@
+lol api
+
+Emits to Server:
+
+"player_request_id": nothing yet
+
+"create_bullet": {player_id:CURRENT_PLAYER_ID}
+
+Pushes from Server
+"server_push": {players: _all_players, bullets: _all_bullets}
