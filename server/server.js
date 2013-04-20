@@ -18,6 +18,17 @@ var _bullet_id = 0;
 //id for players, starts at -1, increment by 1 per player
 var _player_id_set = -1;
 
+function in_wall(x, y, x_disp, y_disp) {
+		var inside = false
+        _all_walls.forEach(function(w){
+        	if(x + x_disp > w.x && x + x_disp + 10 < w.x + w.width && y + y_disp > w.y && y + y_disp< w.y + w.height){
+        		inside = true;
+        	}        	
+        });
+        return inside;
+}
+
+
 // Start server -- Shiny code WOOO
 //var stdin = process.openStdin();    
 var io = require('socket.io').listen(1500);
@@ -86,24 +97,14 @@ io.sockets.on('connection', function(socket) {
 	socket.on("move",function(data) {
 		var tarplayer = find_player(data.id);
 		if (tarplayer){ 
-				tarplayer.vel = data.dirv;
+			tarplayer.vel = data.dirv;	
 		}
 
-		if(in_wall(tarplayer.pos.x, tarplayer.pos.y)){
-			tarplayer.vel = -data.dirv;
-		}				
+
+		console.log(in_wall(tarplayer.pos.x, tarplayer.pos.y));
 	});
 	
 });
-
-function in_wall(x, y) {
-        _all_walls.forEach(function(w){
-        	if (((x > w.x) && (x < w.x + w.width)) && ((y > w.y) && (y < w.y + w.height))){
-        		return true;
-        	}
-        });
-        return false;
-    }
 
 function find_player(id) {
 	var tarplayer = null;
@@ -122,12 +123,13 @@ function gen_output() {
 function game_update(){
 	for (var i = 0; i < _all_players.length; i++) {
 		var curr_player = _all_players[i];
-
-		curr_player.pos.x += curr_player.vel.x;
-		curr_player.pos.y += curr_player.vel.y;
-		
-		curr_player.vel.x*=0.5;
-		curr_player.vel.y*=0.5;
+		if(!in_wall(curr_player.pos.x,curr_player.pos.y,curr_player.vel.x * 2,curr_player.vel.y * 2)){
+			curr_player.pos.x += curr_player.vel.x;
+			curr_player.pos.y += curr_player.vel.y;
+			
+			curr_player.vel.x*=0.5;
+			curr_player.vel.y*=0.5;
+		}
 		
 	}
 	
