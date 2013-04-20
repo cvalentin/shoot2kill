@@ -1,4 +1,12 @@
 //Objects
+var fs = require('fs');
+var vm = require('vm');
+var includeInThisContext = function(path) {
+    var code = fs.readFileSync(path);
+    vm.runInThisContext(code, path);
+}.bind(this);
+includeInThisContext("./chatserver.js");
+chat_init();
 
 function Pos(x,y) {
 	this.x = x;
