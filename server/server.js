@@ -31,7 +31,7 @@ io.sockets.on('connection', function(socket) {
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data, callback) { 
 		
-		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(0,0), new Vel(0,0), data.name));
+		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(1,0), new Vel(0,0), data.name));
 		callback(_player_id_set);
 		_player_id_set++;
 		console.log(_all_players);
