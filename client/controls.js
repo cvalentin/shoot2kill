@@ -17,20 +17,22 @@ var CONTROLS = {
 var KEYS_DOWN = {};
 
 function _controls_keydown(e) {
-	if (CONTROLS.turnleft.indexOf(e.keyCode)!=-1) {
-		KEYS_DOWN.turnleft = 1;
-		
-	} else if (CONTROLS.turnright.indexOf(e.keyCode)!=-1) {
-		KEYS_DOWN.turnright = 1;
-		
-	} else if (CONTROLS.forward.indexOf(e.keyCode)!=-1) {
-		KEYS_DOWN.forward = 1;
-		
-	} else if (CONTROLS.backward.indexOf(e.keyCode)!=-1) {
-		KEYS_DOWN.backward = 1;
-		
-	} else if (CONTROLS.fire.indexOf(e.keyCode)!=-1) {
-		fire();
+	if(document.activeElement.id != enter_chat) {
+		if (CONTROLS.turnleft.indexOf(e.keyCode)!=-1) {
+			KEYS_DOWN.turnleft = 1;
+			
+		} else if (CONTROLS.turnright.indexOf(e.keyCode)!=-1) {
+			KEYS_DOWN.turnright = 1;
+			
+		} else if (CONTROLS.forward.indexOf(e.keyCode)!=-1) {
+			KEYS_DOWN.forward = 1;
+			
+		} else if (CONTROLS.backward.indexOf(e.keyCode)!=-1) {
+			KEYS_DOWN.backward = 1;
+			
+		} else if (CONTROLS.fire.indexOf(e.keyCode)!=-1) {
+			fire();
+		}
 	}
 }
 
