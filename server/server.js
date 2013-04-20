@@ -108,11 +108,14 @@ function gen_output() {
 function game_update(){
 	for (var i = 0; i < _all_players.length; i++) {
 		var curr_player = _all_players[i];
-		curr_player.pos.x += curr_player.vel.x;
-		curr_player.pos.y += curr_player.vel.y;
-		
-		curr_player.vel.x*=0.5;
-		curr_player.vel.y*=0.5;
+
+		if (is_movable(curr_player)) {
+			curr_player.pos.x += curr_player.vel.x;
+			curr_player.pos.y += curr_player.vel.y;
+			
+			curr_player.vel.x*=0.5;
+			curr_player.vel.y*=0.5;
+		}
 	}
 	
 	for (var i = 0; i < _all_bullets.length; i++){

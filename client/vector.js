@@ -16,6 +16,14 @@ function point_distance(a,b) {
 	return Math.sqrt(Math.pow(a.x-b.x,2)+Math.pow(a.y-b.y,2));
 }
 
+function is_movable(player) {
+	var x = player.pos.x;
+	var y = player.pos.y;
+	var vel_x = player.vel.x;
+	var vel_y = player.vel.y;
+	return (x + vel_x > 10 & x + vel_x < 490 && y + vel_y > 10 && y + vel_y < 490);
+}
+
 function rotate_by(pt,theta) {
 	var len = point_distance(pt,cons_point(0,0));
 	var curtheta = Math.atan2(pt.y,pt.x);
