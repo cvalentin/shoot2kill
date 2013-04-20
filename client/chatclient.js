@@ -3,17 +3,17 @@ var _chat_text = "";
 var _chat_messages = {"chat_messages":[]};
 
 function chat_keydown(e) {
-	if (event.keyCode == 13 && document.activeElement.id=="enter_chat") { //enter
+	if (event.keyCode == 13) { //enter
 		_chat_text = $("#enter_chat").val();
 	} else {
 		return;
 	}
-	//socket.emit('chat_enter', {text:_chat_text});
-	_chat_messages.chat_messages.push(_chat_text);
+	_socket.emit('chat_enter', {text:_chat_text,id:_cur_player_id});
 }
 
 //when the server sends you a update, replace your current data with it
 function chat_push(data) {
+	console.log(data);
 	var chat_update_text = "";
 
 	for (var j = 0; j < data.chat_messages.length; j++) {
@@ -23,5 +23,4 @@ function chat_push(data) {
 }
 
 function chat_update() {
-	chat_push(_chat_messages);
 }
