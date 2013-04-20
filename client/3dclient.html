@@ -74,7 +74,7 @@ var GLIB = {
 	},
 	"draw_name":function(name, x,y){
 		_g.fillStyle = COLOR.BLACK;
-		_g.font = "15px Arial";
+		_g.font = "25px Arial";
 		_g.fillText(name, x, y);
 	}
 };
@@ -86,6 +86,7 @@ var MATS = {}
 
 var scene, camera, renderer, floor;
 
+var sky;
 var _added_players = [];
 var _added_bullets = [];
 
@@ -142,22 +143,22 @@ function update() {
 	}
 	
 	if (KEYS_DOWN["turnleft"]) {
-		_socket.emit("turn",{"id":_cur_player_id,"theta":0.135});
+		_socket.emit("turn",{"id":_cur_player_id,"theta":0.2});
 		
 	} 
 	if (KEYS_DOWN["turnright"]) {
-		_socket.emit("turn",{"id":_cur_player_id,"theta":-0.135});
+		_socket.emit("turn",{"id":_cur_player_id,"theta":-0.2});
 	
 	} 
 	if (KEYS_DOWN["forward"]) {
 		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
-		dirv.scalem(7.5);
+		dirv.scalem(15);
 		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
 	
 	} 
 	if (KEYS_DOWN["backward"]) {
 		var dirv = $V([curplayer.dir.x,curplayer.dir.y,0]);
-		dirv.scalem(-7.5);
+		dirv.scalem(-15);
 		_socket.emit("move",{"id":_cur_player_id,"dirv":cons_point(dirv.x(),dirv.y())});
 	}
 }
@@ -171,7 +172,7 @@ function fire() {
 function init() {
 	scene = new THREE.Scene();
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 40000;
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
 	renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -182,7 +183,7 @@ function init() {
 
 	var wallTexture = new THREE.ImageUtils.loadTexture( 'images/wall.png' );
 	wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping; 
-	wallTexture.repeat.set(1,1);
+	wallTexture.repeat.set(20,20);
 	var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture, side: THREE.DoubleSide } );
 	MATS.WALL = wallMaterial;
 	
@@ -205,7 +206,16 @@ function init() {
 	var bullet_material = new THREE.SpriteMaterial( { map: bullet_texture, useScreenCoordinates: false, color: 0xffffff } );
 	MATS.BULLET = bullet_material;
 	camera.up.set(0,0,1);
+	
+	var bg_texture = THREE.ImageUtils.loadTexture( 'images/bg.png' );
+	var bg_material = new THREE.MeshBasicMaterial( { map: bg_texture, useScreenCoordinates: false, color: 0xffffff, side: THREE.DoubleSide  } );
+	MATS.BG = bg_material;
+	
+	var material = MATS.BG;
+	sky = new THREE.Mesh(new THREE.CubeGeometry(30000, 30000, 30000), material);
+	
 }
+
 
 function cons_wall(x,y,wid,hei) {
 	var wallgeo = new THREE.PlaneGeometry(wid, 500, 10, 10);
@@ -259,6 +269,8 @@ function draw(jso) {
 	while(scene.children.length > 0) {
 		scene.remove(scene.children[0]);
 	}
+	
+	scene.add(sky);
 	scene.add(floor);
 	var curplayer = null;
 	
@@ -292,7 +304,6 @@ function draw(jso) {
 		camera.position.set(0,0,1000);
 		camera.lookAt({x:0,y:0,z:0});
 	}
-	
 }
 
 function cons_bullet(x,y) {
@@ -311,13 +322,15 @@ function cons_player(x,y) {
 	return player;
 }
 
+var MMSCALE = 0.4;
+
 function minimap_draw(jso) {
 	if (!jso) return;
 	_g.save();
-	_g.scale(0.6,0.6);
+	_g.scale(MMSCALE,MMSCALE);
 	GLIB.clear_screen();
 	
-	var center = cons_point((SCRN.WID/2)*(1/0.6),SCRN.HEI/2*(1/0.6));
+	var center = cons_point((SCRN.WID/2)*(1/MMSCALE),SCRN.HEI/2*(1/MMSCALE));
 	
 	var curplayer = null;
 	jso.players.forEach(function(i) {
@@ -342,7 +355,7 @@ function minimap_draw(jso) {
 		dvec.normalizem();
 		dvec.scalem(15);
 		GLIB.draw_circle(i.pos.x+dvec.x(),i.pos.y+dvec.y(),3,COLOR.GREEN);
-		GLIB.draw_name(i.name, i.pos.x - 7.5, i.pos.y + 17);
+		GLIB.draw_name(i.name, i.pos.x - 30, i.pos.y + 33);
 	});
 
 	jso.bullets.forEach(function(i) {

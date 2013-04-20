@@ -49,7 +49,7 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('logoff', function(data){
-		console.log("removing player");
+		//console.log("removing player");
 		for(var i = 0; i < _all_players.length; i++) {
 			var cur_players = _all_players[i];
 			if (cur_players.id == data.id) {
@@ -57,7 +57,7 @@ io.sockets.on('connection', function(socket) {
 				console.log("removed one");
 			}
 		}
-		console.log("remove done");
+		//console.log("remove done");
 	});
 
 	socket.on('fire', function(data) {
@@ -70,11 +70,11 @@ io.sockets.on('connection', function(socket) {
 			var bullet_pos = new Pos(tarplayer.pos.x+vec.x(), tarplayer.pos.y+vec.y());
 			
 			vec.normalizem();
-			vec.scalem(9);
+			vec.scalem(20);
 			var bullet_vel = new Vel(vec.x(), vec.y());
 			
 			var newbullet = new Bullet(_bullet_id, data.id, bullet_pos, bullet_vel);
-			newbullet.ct = 50;
+			newbullet.ct = 100;
 			_all_bullets.push(newbullet);
 			_bullet_id++;
 		}
@@ -101,7 +101,7 @@ io.sockets.on('connection', function(socket) {
 		}
 
 
-		console.log(in_wall(tarplayer.pos.x, tarplayer.pos.y));
+		//console.log(in_wall(tarplayer.pos.x, tarplayer.pos.y));
 	});
 	
 });
