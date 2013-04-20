@@ -19,6 +19,19 @@ canvas:not(#game_canvas) {
 	right:0px;
 	opacity:0.5;
 }
+#login {
+	position:absolute;
+	z-index:30;
+	top:0px;
+	right:0px;
+	background-color:#555555;
+	width:100%;
+	height:100%;
+}
+#loginform {
+	text-align:center;
+	margin-top:50px;
+}
 </style>
 <script src="http://spotcos.com/jquery.js"></script>
 <script src="controls.js"></script>
@@ -61,7 +74,7 @@ var GLIB = {
 	},
 	"draw_name":function(name, x,y){
 		_g.fillStyle = COLOR.BLACK;
-		_g.font = "8px Arial";
+		_g.font = "15px Arial";
 		_g.fillText(name, x, y);
 	}
 };
@@ -101,9 +114,14 @@ window.onload = function() {
 		update();
 	},50);
 	
-	_socket.emit('player_request_id', {name: "test"},function(id){
-		_cur_player_id = id;
+	$("#play").click(function() {
+		_socket.emit('player_request_id', {name: $("#name").val()},function(id){
+			_cur_player_id = id;
+			$("#login").hide();
+		});
+		$("#name").val("");
 	});
+	
 	document.addEventListener("keydown", _controls_keydown);
 	document.addEventListener("keyup",_controls_keyup);
 	
@@ -336,6 +354,13 @@ function minimap_draw(jso) {
 
 
 </script>
+<div id="login">
+	<div id="loginform">
+		<img src="logo.png" /><br/>
+		<input type="text" id="name" placeholder="Enter Name" />
+		<input type="submit" id="play" value="Play" />	
+	</div>
+</div>
 <div id="test">
 	<canvas id="game_canvas" width="250" height="250"></canvas>
 </div>
