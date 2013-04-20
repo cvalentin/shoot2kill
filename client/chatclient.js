@@ -9,6 +9,7 @@ function chat_keydown(e) {
 		return;
 	}
 	_socket.emit('chat_enter', {text:_chat_text,id:_cur_player_id});
+	$("#enter_chat").val("");
 }
 
 //when the server sends you a update, replace your current data with it
@@ -16,7 +17,7 @@ function chat_push(data) {
 	var chat_update_text = "";
 
 	for (var j = 0; j < data.chat_messages.length; j++) {
-		chat_update_text += data.chat_messages[j] + "\n";
+		chat_update_text += data.chat_messages[j];
 	}
 	$("#chat_output").val(chat_update_text);
 }
