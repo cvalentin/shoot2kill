@@ -11,6 +11,7 @@ includeInThisContext("./serverdef.js");
 
 var _all_players = [];
 var _all_bullets = [];
+var _all_scores = [];
 var _bullet_id = 0;
 
 //id for players, starts at 0, increment by 1 per player

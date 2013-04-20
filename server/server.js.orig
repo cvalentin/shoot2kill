@@ -20,11 +20,6 @@ var _player_id_set = 0;
 //var stdin = process.openStdin();    
 var io = require('socket.io').listen(1500);
 io.set('log level', 1);
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 9330024fce41092ac7832e70f311fd90ba63fcbd
 io.sockets.on('connection', function(socket) {
 	
 	socket.on('chat_enter',chat_enter);
@@ -34,10 +29,11 @@ io.sockets.on('connection', function(socket) {
 	//give the player an id and add a new player object when an id is requested
 	socket.on('player_request_id', function(data, callback) { 
 <<<<<<< HEAD
+		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(0,0), new Vel(0,0), data.name));
 =======
 		
->>>>>>> 9330024fce41092ac7832e70f311fd90ba63fcbd
-		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(0,0), new Vel(0,0), data.name));
+		_all_players.push(new Player(_player_id_set, new Pos(150,150), new Dir(1,0), new Vel(0,0), data.name));
+>>>>>>> 3b500bb20da4a823036d04b807e72daeb1946a7c
 		callback(_player_id_set);
 		_player_id_set++;
 		console.log(_all_players);
@@ -115,7 +111,11 @@ function game_update(){
 		curr_bullet.pos.y += curr_bullet.vel.y;
 		curr_bullet.ct--;
 		if (curr_bullet.ct <= 0) {
-			//_all_bullets.remove(curr_bullet);
+			_all_bullets.remove(i);
+		} else {
+			
+			
 		}
 	}
+	console.log(_all_bullets.length);
 }
