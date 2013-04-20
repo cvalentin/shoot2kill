@@ -35,15 +35,6 @@ function Wall(x, y, width, height){
 	this.height = height;
 }
 
-/*
-hardcoded wall
-x = 0;
-y = 0;
-width = 500;
-height = 1;
-
-
-*/
 
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
