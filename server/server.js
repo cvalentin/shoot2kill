@@ -34,7 +34,7 @@ io.sockets.on('connection', function(socket) {
 		_player_id_set++;
 	});
 	
-	socket.on('disconnect', function(data){
+	socket.on('logoff', function(data){
 		for(var i = 0; i < _all_players.length; i++) {
 			var cur_players = _all_players[i];
 			if (cur_players.id == data.id) {

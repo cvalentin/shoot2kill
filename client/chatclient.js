@@ -13,7 +13,6 @@ function chat_keydown(e) {
 
 //when the server sends you a update, replace your current data with it
 function chat_push(data) {
-	console.log(data);
 	var chat_update_text = "";
 
 	for (var j = 0; j < data.chat_messages.length; j++) {
